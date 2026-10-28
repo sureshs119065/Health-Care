@@ -1,0 +1,17 @@
+---
+import { WHATSAPP_NUMBER, SERVICE_AREA, ORDER_HOURS } from "../config";
+const digits = WHATSAPP_NUMBER.replace(/\D/g, "");
+const href = `https://wa.me/${digits}?text=${encodeURIComponent("Hello, I have a question about your products.")}`;
+---
+<section id="contact" class="scroll-mt-16 bg-leaf text-cream" aria-labelledby="contact-title">
+  <div class="mx-auto max-w-[1400px] px-4 py-10">
+    <h2 id="contact-title" class="text-2xl font-bold md:text-3xl">Talk to us</h2>
+    <p class="mt-2 max-w-xl text-lg">Questions about ingredients, delivery or a bulk order? Message us on WhatsApp.</p>
+    <ul class="mt-4 space-y-1">
+      <li>WhatsApp: +{digits}</li>
+      <li>{ORDER_HOURS}</li>
+      <li>{SERVICE_AREA}</li>
+    </ul>
+    <a href={href} target="_blank" rel="noopener" class="btn mt-5 bg-cream text-leaf-dark hover:bg-cream-dark">Chat on WhatsApp</a>
+  </div>
+</section>

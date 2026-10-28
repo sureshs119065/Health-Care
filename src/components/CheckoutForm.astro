@@ -1,0 +1,32 @@
+---
+interface Props {
+  prefix: string;
+  showBack?: boolean;
+}
+const { prefix, showBack = false } = Astro.props;
+---
+<form id={`${prefix}-form`} class="space-y-4" novalidate>
+  <div>
+    <label for={`${prefix}-name`} class="mb-1 block font-semibold">Your name</label>
+    <input id={`${prefix}-name`} class="input" autocomplete="name" required aria-describedby={`${prefix}-e-name`} />
+    <p id={`${prefix}-e-name`} class="field-error" hidden></p>
+  </div>
+  <div>
+    <label for={`${prefix}-phone`} class="mb-1 block font-semibold">Phone number (10 digits)</label>
+    <input id={`${prefix}-phone`} class="input" type="tel" inputmode="numeric" autocomplete="tel" required aria-describedby={`${prefix}-e-phone`} />
+    <p id={`${prefix}-e-phone`} class="field-error" hidden></p>
+  </div>
+  <div>
+    <label for={`${prefix}-address`} class="mb-1 block font-semibold">Delivery address</label>
+    <textarea id={`${prefix}-address`} rows="3" class="input" autocomplete="street-address" required aria-describedby={`${prefix}-e-address`}></textarea>
+    <p id={`${prefix}-e-address`} class="field-error" hidden></p>
+  </div>
+  <div>
+    <label for={`${prefix}-notes`} class="mb-1 block font-semibold">Notes (optional)</label>
+    <textarea id={`${prefix}-notes`} rows="2" class="input"></textarea>
+  </div>
+  <p class="flex justify-between text-lg font-bold"><span>Estimated total</span><span id={`${prefix}-total`}>₹0</span></p>
+  <p class="text-sm">The total is confirmed by the owner on WhatsApp. No payment is taken here.</p>
+  <button id={`${prefix}-submit`} type="submit" class="btn btn-primary w-full">Send Order on WhatsApp</button>
+  {showBack && <button id={`${prefix}-back`} type="button" class="btn btn-outline w-full">Back to cart</button>}
+</form>

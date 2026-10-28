@@ -1,0 +1,24 @@
+---
+const faqs = [
+  ["How do I place an order?", "Add items to your cart, fill in your details and tap “Send Order on WhatsApp”. Your order is written for you. Just press send in WhatsApp."],
+  ["Do I pay on this website?", "No. There is no online payment here. After we confirm your total on WhatsApp, we send a UPI QR code and you pay from your own UPI app."],
+  ["Is the total on the website final?", "The total shown is an estimate. We confirm the final total, including delivery if any, on WhatsApp before you pay."],
+  ["How does delivery work?", "We confirm delivery options and timing for your address on WhatsApp after you send your order."],
+  ["Can I change or cancel my order?", "Yes, before you pay. Message us on WhatsApp and we will update the order."],
+  ["Can these foods replace medical advice?", "No. Our foods are not a substitute for medical advice. Please consult your doctor or dietitian about your diet."],
+];
+---
+<section class="mx-auto max-w-3xl px-4 py-10" aria-labelledby="faq-title">
+  <h2 id="faq-title" class="text-2xl font-bold md:text-3xl">Questions people ask</h2>
+  <div class="mt-4 divide-y divide-line rounded-xl border border-line bg-white">
+    {faqs.map(([q, a]) => (
+      <details class="group px-4">
+        <summary class="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 py-3 font-semibold [&::-webkit-details-marker]:hidden">
+          <span>{q}</span>
+          <span class="text-leaf transition-transform group-open:rotate-180" aria-hidden="true">▾</span>
+        </summary>
+        <p class="max-w-prose pb-4">{a}</p>
+      </details>
+    ))}
+  </div>
+</section>

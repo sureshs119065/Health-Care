@@ -1,0 +1,14 @@
+---
+import { STORE_NAME } from "../config";
+const link = "inline-flex min-h-11 items-center px-3 font-semibold hover:underline";
+---
+<header class="sticky top-0 z-30 border-b border-line bg-cream/95 backdrop-blur">
+  <div class="mx-auto flex max-w-[1400px] items-center justify-between gap-3 px-4 py-2">
+    <a href="/" class="inline-flex min-h-11 items-center font-serif text-xl font-bold text-leaf">{STORE_NAME}</a>
+    <nav class="hidden items-center gap-1 md:flex" aria-label="Main">
+      <a href="/#menu" class={link}>Menu</a>
+      <a href="/#contact" class={link}>Contact</a>
+      <a id="header-cart" href="/cart" class="btn btn-outline ml-2">Cart (<span id="header-count">0</span>)</a>
+    </nav>
+  </div>
+</header>

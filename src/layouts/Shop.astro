@@ -1,0 +1,44 @@
+---
+import Base from "./Base.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import CartDrawer from "../components/CartDrawer.astro";
+import { WHATSAPP_NUMBER } from "../config";
+interface Props {
+  title: string;
+  description: string;
+  drawer?: boolean;
+  bar?: boolean;
+  image?: string;
+  noindex?: boolean;
+  jsonLd?: Record<string, unknown>;
+}
+const { title, description, drawer = true, bar = true, image, noindex, jsonLd } = Astro.props;
+const waHref = `https://wa.me/${WHATSAPP_NUMBER.replace(/\D/g, "")}`;
+---
+<Base title={title} description={description} image={image} noindex={noindex} jsonLd={jsonLd}>
+  <Header />
+  <main id="main">
+    <noscript>
+      <p class="m-4 rounded-lg border-2 border-saffron bg-amber-50 p-4 font-semibold">
+        This website needs JavaScript to show the menu. You can still order by messaging us on
+        <a href={waHref} class="underline">WhatsApp</a>.
+      </p>
+    </noscript>
+    <slot />
+  </main>
+  <Footer />
+  {bar && (
+    <div id="cart-bar" class="fixed inset-x-0 bottom-0 z-30 hidden border-t border-line bg-cream p-3 md:hidden">
+      <button id="bar-btn" type="button" class="btn btn-primary w-full justify-between" aria-haspopup="dialog">
+        <span>View Cart (<span id="bar-count">0</span>)</span>
+        <span id="bar-total"></span>
+      </button>
+    </div>
+  )}
+  {drawer && <CartDrawer />}
+  <div id="toast" aria-hidden="true" class="pointer-events-none fixed bottom-24 left-1/2 z-[55] hidden max-w-[90vw] -translate-x-1/2 rounded-lg bg-ink px-4 py-3 text-center font-semibold text-white shadow-lg md:bottom-6"></div>
+  <script>
+    import "../scripts/shell";
+  </script>
+</Base>
