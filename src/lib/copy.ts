@@ -11,11 +11,13 @@ export function cleanClaims(text: string): string {
 export const wording = CLAIMS_APPROVED
   ? {
       title: "Organic, diabetic-friendly foods made with care",
+      valueProp: "Affordable, home-style healthy food from a nurse you can trust, ordered in one WhatsApp message.",
       metaDescription:
         "Organic, diabetic-friendly foods from a nurse's kitchen. Choose your items and send your order on WhatsApp.",
     }
   : {
       title: "Wholesome, low sugar foods made with care",
+      valueProp: "Affordable, home-style healthy food from a nurse you can trust, ordered in one WhatsApp message.",
       metaDescription:
         "Wholesome, low sugar foods from a nurse's kitchen. Choose your items and send your order on WhatsApp.",
     };

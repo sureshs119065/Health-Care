@@ -1,9 +1,15 @@
 ---
 import { STORE_NAME, FSSAI_NUMBER } from "../config";
+const links = [["Shop", "/shop"], ["Recipe Videos", "/recipes"], ["About Us", "/about"], ["Contact", "/#contact"]];
 ---
-<footer class="bg-leaf-dark px-4 py-8 pb-28 text-cream md:pb-8">
-  <div class="mx-auto max-w-[1400px] space-y-2">
+<footer class="bg-leaf-dark px-4 py-8 pb-28 text-white md:pb-8">
+  <div class="mx-auto max-w-[1400px] space-y-3">
     <p class="font-serif text-lg font-bold">{STORE_NAME}</p>
+    <nav aria-label="Footer">
+      <ul class="flex flex-wrap gap-x-2">
+        {links.map(([label, href]) => <li><a href={href} class="inline-flex min-h-11 items-center px-1 underline underline-offset-4">{label}</a></li>)}
+      </ul>
+    </nav>
     <p>FSSAI Lic. No. {FSSAI_NUMBER}</p>
     <p>Not a substitute for medical advice. Consult your doctor or dietitian.</p>
     <p>Menu updated: <span id="updated">loading…</span></p>

@@ -6,7 +6,7 @@ import type { Product } from "./types";
 export const COLUMNS = [
   "id", "name", "category", "price", "weight", "image", "shortDescription",
   "ingredients", "calories", "protein", "carbs", "fibre", "fat", "fssai",
-  "inStock", "videoId", "tags",
+  "inStock", "videoId", "tags", "howToUse",
 ] as const;
 
 const CACHE_KEY = "products:v1";
@@ -69,6 +69,7 @@ export function rowsToProducts(rows: string[][]): Product[] {
         .split(/[,;|]/)
         .map((t) => t.trim())
         .filter(Boolean),
+      howToUse: cleanClaims(get("howToUse")),
     });
   });
   return out;

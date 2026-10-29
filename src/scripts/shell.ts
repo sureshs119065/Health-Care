@@ -1,4 +1,6 @@
 // Runs on every page: cart counts, mobile cart bar, and the slide-in cart drawer.
+import "./header";
+import "./compare-tray";
 import { ENABLE_PWA } from "../config";
 import * as cart from "../lib/cart";
 import { readForm, resetForm, sendOrder } from "../lib/checkout";
@@ -107,6 +109,12 @@ if (drawer) {
   });
 
   byId("bar-btn")?.addEventListener("click", openDrawer);
+  byId("header-cart")?.addEventListener("click", (e) => {
+    if (window.matchMedia("(max-width: 767px)").matches) {
+      e.preventDefault();
+      openDrawer();
+    }
+  });
   $("#close").addEventListener("click", closeDrawer);
   $("#overlay").addEventListener("click", closeDrawer);
   $("#to-checkout").addEventListener("click", () => {

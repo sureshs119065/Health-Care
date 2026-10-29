@@ -9,11 +9,12 @@ interface Props {
   description: string;
   drawer?: boolean;
   bar?: boolean;
+  tray?: boolean;
   image?: string;
   noindex?: boolean;
   jsonLd?: Record<string, unknown>;
 }
-const { title, description, drawer = true, bar = true, image, noindex, jsonLd } = Astro.props;
+const { title, description, drawer = true, bar = true, tray = true, image, noindex, jsonLd } = Astro.props;
 const waHref = `https://wa.me/${WHATSAPP_NUMBER.replace(/\D/g, "")}`;
 ---
 <Base title={title} description={description} image={image} noindex={noindex} jsonLd={jsonLd}>
@@ -36,8 +37,14 @@ const waHref = `https://wa.me/${WHATSAPP_NUMBER.replace(/\D/g, "")}`;
       </button>
     </div>
   )}
+  {tray && (
+    <div id="compare-tray" class="fixed bottom-[4.75rem] left-3 right-3 z-30 hidden items-center justify-between gap-3 rounded-xl border-2 border-leaf bg-white p-2 pl-4 shadow-lg md:bottom-4 md:left-auto md:right-4 md:w-96">
+      <a id="compare-link" href="/compare" class="font-semibold text-leaf underline underline-offset-2">Compare (<span id="compare-count">0</span>)</a>
+      <button id="compare-clear" type="button" class="btn btn-outline">Clear</button>
+    </div>
+  )}
   {drawer && <CartDrawer />}
-  <div id="toast" aria-hidden="true" class="pointer-events-none fixed bottom-24 left-1/2 z-[55] hidden max-w-[90vw] -translate-x-1/2 rounded-lg bg-ink px-4 py-3 text-center font-semibold text-white shadow-lg md:bottom-6"></div>
+  <div id="toast" aria-hidden="true" class="pointer-events-none fixed left-1/2 top-24 z-[55] hidden max-w-[90vw] -translate-x-1/2 rounded-lg bg-ink px-4 py-3 text-center font-semibold text-white shadow-lg"></div>
   <script>
     import "../scripts/shell";
   </script>

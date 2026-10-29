@@ -1,13 +1,16 @@
 @import "tailwindcss";
 
 @theme {
-  --color-cream: #fbf6e9;
-  --color-cream-dark: #f0e7cf;
+  --color-cream: #fcfbf7;
+  --color-cream-dark: #f1eee3;
   --color-leaf: #1f5d3a;
   --color-leaf-dark: #143d27;
   --color-ink: #1b2a21;
-  --color-line: #cfc39b;
+  --color-line: #ddd8c4;
   --color-saffron: #8a5a00;
+  --color-tint: #eaf3ec;
+  --color-accent: #b45309;
+  --color-accent-dark: #92400e;
   --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", sans-serif;
   --font-serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
 }
@@ -46,6 +49,18 @@ h1, h2, h3 {
   }
   .btn-primary {
     @apply bg-leaf text-white hover:bg-leaf-dark;
+  }
+  .btn-accent {
+    @apply bg-accent text-white hover:bg-accent-dark;
+  }
+  .card {
+    @apply rounded-xl border border-line bg-white shadow-sm;
+  }
+  .nav-link {
+    @apply inline-flex min-h-11 items-center rounded-lg px-3 font-semibold text-ink hover:bg-cream-dark hover:text-leaf;
+  }
+  .nav-link[aria-current="page"] {
+    @apply text-leaf underline decoration-2 underline-offset-8;
   }
   .btn-outline {
     @apply border-2 border-leaf bg-transparent text-leaf hover:bg-cream-dark;

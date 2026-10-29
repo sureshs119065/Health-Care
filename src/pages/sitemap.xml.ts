@@ -28,7 +28,7 @@ async function productIds(): Promise<string[]> {
 
 export const GET: APIRoute = async () => {
   const today = new Date().toISOString().slice(0, 10);
-  const urls = [`${SITE_URL}/`, ...(await productIds()).map((id) => `${SITE_URL}/product?id=${encodeURIComponent(id)}`)];
+  const urls = [`${SITE_URL}/`, `${SITE_URL}/shop`, `${SITE_URL}/recipes`, `${SITE_URL}/about`, ...(await productIds()).map((id) => `${SITE_URL}/product?id=${encodeURIComponent(id)}`)];
   const body =
     `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
     urls.map((u) => `  <url><loc>${esc(u)}</loc><lastmod>${today}</lastmod></url>`).join("\n") +

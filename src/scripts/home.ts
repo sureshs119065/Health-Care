@@ -1,111 +1,79 @@
-import * as cart from "../lib/cart";
 import { $, h } from "../lib/dom";
+import { productCard } from "../lib/card";
 import { getProducts, loadMenu } from "../lib/store";
-import type { Product } from "../lib/types";
-import { PLACEHOLDER, setVisible, toast } from "../lib/ui";
-import { formatMoney } from "../lib/whatsapp";
+import { setVisible } from "../lib/ui";
+import { videoPlayer } from "../lib/video";
+import * as cart from "../lib/cart";
+import { toast } from "../lib/ui";
 
-let category = "All";
-let query = "";
-
-function renderChips(): void {
-  const chips = $("#chips");
-  chips.replaceChildren();
-  const cats = ["All", ...Array.from(new Set(getProducts().map((p) => p.category))).sort()];
-  for (const c of cats) {
-    chips.append(
-      h("button", {
-        type: "button",
-        class: "chip",
-        "aria-pressed": String(c === category),
-        onclick: () => {
-          category = c;
-          renderChips();
-          renderGrid();
+function renderCategories(): void {
+  const counts = new Map<string, number>();
+  for (const p of getProducts()) counts.set(p.category, (counts.get(p.category) ?? 0) + 1);
+  const top = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).slice(0, 6);
+  $("#cat-tiles").replaceChildren(
+    ...top.map(([name, n]) =>
+      h("li", {},
+        h("a", {
+          href: `/shop?category=${encodeURIComponent(name)}`,
+          class: "card flex min-h-24 flex-col justify-center p-4 transition-shadow hover:shadow-md",
         },
-      }, c),
-    );
-  }
+          h("span", { class: "font-serif text-lg font-bold text-leaf" }, name),
+          h("span", { class: "text-sm" }, n === 1 ? "1 item" : `${n} items`))),
+    ),
+  );
 }
 
-function matches(p: Product): boolean {
-  if (category !== "All" && p.category !== category) return false;
-  if (!query) return true;
-  const hay = [p.name, p.category, p.shortDescription, p.tags.join(" ")].join(" ").toLowerCase();
-  return query.split(/\s+/).every((word) => hay.includes(word));
+function renderFeatured(): void {
+  const inStock = getProducts().filter((p) => p.inStock);
+  const tagged = inStock.filter((p) => p.tags.some((t) => t.toLowerCase() === "featured"));
+  const picks = (tagged.length ? tagged : inStock).slice(0, 8);
+  $("#featured-grid").replaceChildren(...picks.map(productCard));
 }
 
-function card(p: Product): HTMLElement {
-  const img = h("img", {
-    src: p.image || PLACEHOLDER,
-    alt: p.name,
-    width: "400",
-    height: "400",
-    loading: "lazy",
-    decoding: "async",
-    class: "aspect-square w-full bg-cream-dark object-cover",
-  });
-  img.addEventListener("error", () => {
-    if (!img.src.endsWith(PLACEHOLDER)) img.src = PLACEHOLDER;
-  });
-
-  const media = h("div", { class: "relative" }, img);
-  if (!p.inStock) {
-    media.append(h("span", { class: "absolute left-2 top-2 rounded-md bg-ink px-2 py-1 text-sm font-bold text-white" }, "Sold out"));
-  }
-
-  const add = h("button", {
-    type: "button",
-    class: "btn btn-primary mt-auto w-full",
-    disabled: !p.inStock,
-    "aria-label": p.inStock ? `Add ${p.name} to cart` : `${p.name} is sold out`,
-    onclick: () => {
-      if (!p.inStock) return;
-      cart.add(p.id);
-      toast(`${p.name} added to cart.`);
-    },
-  }, p.inStock ? "Add to cart" : "Sold out");
-
-  return h("li", { class: "flex flex-col overflow-hidden rounded-xl border border-line bg-white" },
-    media,
-    h("div", { class: "flex flex-1 flex-col gap-1 p-3" },
-      h("h3", { class: "text-base font-bold" },
-        h("a", { href: `/product?id=${encodeURIComponent(p.id)}`, class: "underline-offset-2 hover:underline" }, p.name)),
-      h("p", { class: "text-sm" }, p.weight),
-      h("p", { class: "mb-2 text-lg font-bold text-leaf" }, formatMoney(p.price)),
-      add));
-}
-
-function renderGrid(): void {
-  const grid = $("#grid");
-  const list = getProducts().filter(matches);
-  grid.replaceChildren(...list.map(card));
-  setVisible(grid, list.length > 0, "grid");
-  setVisible($("#empty"), list.length === 0);
+function renderVideos(): void {
+  const withVideo = getProducts().filter((p) => p.videoId).slice(0, 3);
+  $("#video-grid").replaceChildren(
+    ...withVideo.map((p) =>
+      h("article", { class: "card overflow-hidden" },
+        videoPlayer(p),
+        h("div", { class: "space-y-2 p-4" },
+          h("h3", { class: "font-bold" }, p.name),
+          p.howToUse ? h("p", { class: "text-sm" }, p.howToUse) : h("span"),
+          h("div", { class: "flex flex-wrap gap-2" },
+            h("a", { href: `/product?id=${encodeURIComponent(p.id)}`, class: "btn btn-outline" }, "View product"),
+            p.inStock
+              ? h("button", {
+                  type: "button",
+                  class: "btn btn-primary",
+                  onclick: () => {
+                    cart.add(p.id);
+                    toast(`${p.name} added to cart.`);
+                  },
+                }, "Add to cart")
+              : h("span")))),
+    ),
+  );
+  setVisible($("#video-empty"), withVideo.length === 0);
+  setVisible($("#video-grid"), withVideo.length > 0, "grid");
 }
 
 async function init(force = false): Promise<void> {
-  setVisible($("#skeleton"), true, "grid");
-  setVisible($("#error"), false);
-  setVisible($("#empty"), false);
-  setVisible($("#grid"), false, "grid");
+  setVisible($("#home-skeleton"), true);
+  setVisible($("#home-error"), false);
+  setVisible($("#home-content"), false);
   try {
     await loadMenu(force);
-    if (category !== "All" && !getProducts().some((p) => p.category === category)) category = "All";
-    setVisible($("#skeleton"), false, "grid");
-    renderChips();
-    renderGrid();
+    renderCategories();
+    renderFeatured();
+    renderVideos();
+    setVisible($("#home-skeleton"), false);
+    setVisible($("#home-content"), true);
   } catch (err) {
     console.error(err);
-    setVisible($("#skeleton"), false, "grid");
-    setVisible($("#error"), true);
+    setVisible($("#home-skeleton"), false);
+    setVisible($("#home-error"), true);
   }
 }
 
 $("#retry").addEventListener("click", () => void init(true));
-$<HTMLInputElement>("#search").addEventListener("input", (e) => {
-  query = (e.target as HTMLInputElement).value.trim().toLowerCase();
-  renderGrid();
-});
-
 void init();

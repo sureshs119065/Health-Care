@@ -16,6 +16,7 @@ export interface Product {
   inStock: boolean;
   videoId: string;
   tags: string[];
+  howToUse: string;
 }
 
 export interface CartLine {

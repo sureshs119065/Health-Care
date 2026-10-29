@@ -1,5 +1,8 @@
 import { FSSAI_NUMBER, MAX_QTY, SITE_URL, STORE_NAME, WHATSAPP_NUMBER } from "../config";
 import * as cart from "../lib/cart";
+import * as compare from "../lib/compare";
+import { formatUnitPrice } from "../lib/pricing";
+import { videoPlayer } from "../lib/video";
 import { $, h } from "../lib/dom";
 import { getProduct, loadMenu } from "../lib/store";
 import type { Product } from "../lib/types";
@@ -81,30 +84,21 @@ function nutritionTable(p: Product): HTMLElement | null {
 
 function videoBlock(p: Product): HTMLElement | null {
   if (!p.videoId) return null;
-  const box = h("div", { class: "relative aspect-video max-w-2xl overflow-hidden rounded-xl bg-leaf-dark" });
-  const play = h("button", {
-    type: "button",
-    class: "absolute inset-0 flex h-full w-full cursor-pointer flex-col items-center justify-center gap-2 text-lg font-semibold text-cream",
-    "aria-label": `Play video: ${p.name}`,
-    onclick: () => {
-      const frame = h("iframe", {
-        src: `https://www.youtube-nocookie.com/embed/${p.videoId}?autoplay=1&rel=0`,
-        title: `Video: ${p.name}`,
-        class: "absolute inset-0 h-full w-full",
-        allow: "autoplay; encrypted-media; picture-in-picture",
-        allowfullscreen: true,
-        referrerpolicy: "strict-origin-when-cross-origin",
-      });
-      box.replaceChildren(frame);
-      frame.focus();
-    },
-  },
-    h("span", { class: "flex h-16 w-16 items-center justify-center rounded-full bg-cream text-3xl text-leaf-dark", "aria-hidden": "true" }, "▶"),
-    "Play video",
-    h("span", { class: "px-4 text-center text-sm font-normal" }, "The video loads from YouTube only when you tap play."));
-  box.append(play);
   return h("section", { class: "mt-8", "aria-labelledby": "video-title" },
-    h("h2", { id: "video-title", class: "mb-3 text-xl font-bold" }, "Watch the video"), box);
+    h("h2", { id: "video-title", class: "mb-3 text-xl font-bold" }, "Recipe video"),
+    h("div", { class: "max-w-2xl" }, videoPlayer(p)));
+}
+
+function compareButton(p: Product): HTMLElement {
+  const btn = h("button", { type: "button", class: "btn btn-outline", onclick: () => {
+    if (compare.toggle(p.id) === "full") toast(`You can compare up to ${compare.MAX_COMPARE} items. Remove one first.`);
+  } });
+  const sync = () => {
+    btn.textContent = compare.has(p.id) ? "Remove from compare" : "Add to compare";
+  };
+  compare.subscribe(sync);
+  sync();
+  return btn;
 }
 
 function quantityAndAdd(p: Product): HTMLElement {
@@ -166,6 +160,7 @@ function render(p: Product): void {
     h("p", { class: "font-semibold text-leaf" }, p.category),
     h("h1", { class: "text-3xl font-bold" }, p.name),
     h("p", { class: "text-2xl font-bold text-leaf" }, formatMoney(p.price), p.weight ? ` / ${p.weight}` : ""),
+    formatUnitPrice(p) ? h("p", { class: "text-sm" }, `Price per 100 g or ml: ${formatUnitPrice(p)}`) : h("span"),
     h("p", {
       class: p.inStock
         ? "inline-block rounded-md border-2 border-leaf px-3 py-1 font-semibold text-leaf"
@@ -173,6 +168,7 @@ function render(p: Product): void {
     }, p.inStock ? "In stock" : "Sold out"),
     p.shortDescription ? h("p", { class: "max-w-prose text-lg" }, p.shortDescription) : h("span"),
     quantityAndAdd(p),
+    compareButton(p),
     h("p", { class: "text-sm" }, "The total is confirmed by the owner on WhatsApp before you pay."));
 
   const article = $("#product");
@@ -184,8 +180,14 @@ function render(p: Product): void {
         h("p", { class: "max-w-prose" }, p.ingredients || "Ask us on WhatsApp for the full ingredient list.")),
       nutrition
         ? h("section", { "aria-labelledby": "nut-title" },
-            h("h2", { id: "nut-title", class: "mb-2 text-xl font-bold" }, "Nutrition"), nutrition)
+            h("h2", { id: "nut-title", class: "mb-2 text-xl font-bold" }, "Nutrition"), nutrition,
+            h("p", { class: "mt-2 max-w-md text-sm" }, "Values are per 100 g, as supplied by the seller. Your portion may be smaller or larger."))
         : h("span")),
+    ...(p.howToUse
+      ? [h("section", { class: "mt-8", "aria-labelledby": "use-title" },
+          h("h2", { id: "use-title", class: "mb-2 text-xl font-bold" }, "How to use"),
+          h("p", { class: "max-w-prose" }, p.howToUse))]
+      : []),
     h("dl", { class: "mt-8 grid max-w-md grid-cols-[auto_1fr] gap-x-4 gap-y-1" },
       ...details.flatMap(([k, v]) => (v ? [h("dt", { class: "font-semibold" }, k), h("dd", {}, v)] : []))),
     ...(video ? [video] : []),

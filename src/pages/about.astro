@@ -1,0 +1,54 @@
+---
+import Shop from "../layouts/Shop.astro";
+import { ABOUT_STORY, FSSAI_NUMBER, HYGIENE_NOTE, PACKAGING_NOTE, SELLER_NAME, STORE_NAME, WHATSAPP_NUMBER } from "../config";
+
+const story = ABOUT_STORY || `${STORE_NAME} is run by a nurse who makes these foods in small batches and sells them directly to customers.`;
+const waHref = `https://wa.me/${WHATSAPP_NUMBER.replace(/\D/g, "")}?text=${encodeURIComponent("Hello, I have a question about your products.")}`;
+const checks = [
+  ["Ingredients", "Listed on every product page so you can check them against your own needs."],
+  ["Nutrition", "A nutrition table per 100 g, as supplied by the seller, on every product page."],
+  ["Price and pack size", "Each pack shows its price, size and price per 100 g so you can compare."],
+  ["FSSAI number", `Shown in the footer and on product pages: ${FSSAI_NUMBER}.`],
+];
+---
+<Shop title={`About us | ${STORE_NAME}`} description={`About ${STORE_NAME}, how the food is made and how to order.`}>
+  <div class="mx-auto max-w-4xl px-4 py-8">
+    <h1 class="text-3xl font-bold">About us</h1>
+    <p class="mt-4 text-lg">{SELLER_NAME ? `${SELLER_NAME}. ` : ""}{story}</p>
+
+    <h2 class="mt-10 text-2xl font-bold">What you can check on every product</h2>
+    <ul class="mt-4 grid gap-3 sm:grid-cols-2">
+      {checks.map(([t, d]) => (
+        <li class="card p-4">
+          <p class="font-serif text-lg font-bold text-leaf">{t}</p>
+          <p class="mt-1">{d}</p>
+        </li>
+      ))}
+    </ul>
+
+    {(PACKAGING_NOTE || HYGIENE_NOTE) && (
+      <>
+        <h2 class="mt-10 text-2xl font-bold">Packaging and hygiene</h2>
+        {HYGIENE_NOTE && <p class="mt-3 max-w-prose text-lg">{HYGIENE_NOTE}</p>}
+        {PACKAGING_NOTE && <p class="mt-3 max-w-prose text-lg">{PACKAGING_NOTE}</p>}
+      </>
+    )}
+
+    <h2 class="mt-10 text-2xl font-bold">How ordering and payment work</h2>
+    <p class="mt-3 max-w-prose text-lg">
+      You choose items on this site and send the order on WhatsApp. The seller then confirms your total, including delivery if any,
+      and shares a UPI QR code separately. There is no online payment on this website, and you pay only after the total is confirmed.
+    </p>
+
+    <h2 class="mt-10 text-2xl font-bold">An honest note about health</h2>
+    <p class="mt-3 max-w-prose text-lg">
+      We describe what is in each product and do not claim that any food treats, cures or prevents a disease.
+      Not a substitute for medical advice. Consult your doctor or dietitian about your diet.
+    </p>
+
+    <div class="mt-10 flex flex-wrap gap-3">
+      <a href="/shop" class="btn btn-accent">Shop Now</a>
+      <a href={waHref} target="_blank" rel="noopener" class="btn btn-outline">Ask a question on WhatsApp</a>
+    </div>
+  </div>
+</Shop>

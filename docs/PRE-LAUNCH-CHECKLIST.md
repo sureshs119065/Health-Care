@@ -32,6 +32,11 @@ Tick every item before sharing the website with customers.
 - [ ] Ask about daily receiving limits for UPI.
 - [ ] Keep a record of each order and payment for your accounts. Ask your accountant about GST and income records.
 
+## Trust and About text
+- [ ] Every line in `TRUST_POINTS`, `ABOUT_STORY`, `HYGIENE_NOTE` and `PACKAGING_NOTE` is true and can be shown to an inspector.
+- [ ] No review, rating, certificate or health benefit appears anywhere unless you can prove it.
+- [ ] The `howToUse` tips match your pack instructions.
+
 ## Search and sharing
 - [ ] `SITE_URL` in `src/config.ts` matches your live address, then deploy again.
 - [ ] Open `your-site/sitemap.xml` and `your-site/robots.txt`. Both should load.

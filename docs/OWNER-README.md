@@ -27,6 +27,12 @@ Change `inStock` for that row to `FALSE`. Change it back to `TRUE` when it is av
 Add a new row at the bottom. Fill `id` (a short code that is not used by any other row, for example `P013`), `name`, `category`, `price` (numbers only, like 180) and `inStock`. Rows with a missing id, name or a non-number price are skipped.
 Nutrition values are for **100 g**. Energy is in kcal; protein, carbs, fibre and fat are in grams. Use real values from a lab report or label calculation. The sample numbers are only examples.
 
+## 5b. New in this version: tips, featured items and trust text
+- **howToUse column:** one or two true sentences on how to use the product. It appears on the product page and the recipe sections.
+- **featured tag:** add `featured` to the `tags` of products you want on the home page.
+- **Small packs:** add a small pack (for example 50 g) as its own row so customers on a budget can try it. The site shows the price per 100 g for every pack.
+- **Trust and About text:** edit `TRUST_POINTS`, `SELLER_NAME`, `ABOUT_STORY`, `HYGIENE_NOTE` and `PACKAGING_NOTE` in `src/config.ts`. Write only things that are true and that you could show to an inspector. Leave a note empty to hide it.
+
 ## 6. Add a photo
 1. Resize the photo to about 800 x 800 pixels and keep it under 200 KB.
 2. Save it in the project folder `public/images/` with a simple name, like `millet-soup.jpg`.

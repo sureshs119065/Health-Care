@@ -1,14 +1,61 @@
 ---
 import { STORE_NAME } from "../config";
-const link = "inline-flex min-h-11 items-center px-3 font-semibold hover:underline";
+const path = Astro.url.pathname.replace(/\.html$/, "").replace(/\/$/, "") || "/";
+const links = [
+  ["Home", "/"],
+  ["Shop", "/shop"],
+  ["Categories", "/shop#categories"],
+  ["Recipe Videos", "/recipes"],
+  ["About Us", "/about"],
+  ["Contact", "/#contact"],
+];
+const current = (href: string) => (!href.includes("#") && href === path ? "page" : undefined);
 ---
-<header class="sticky top-0 z-30 border-b border-line bg-cream/95 backdrop-blur">
-  <div class="mx-auto flex max-w-[1400px] items-center justify-between gap-3 px-4 py-2">
-    <a href="/" class="inline-flex min-h-11 items-center font-serif text-xl font-bold text-leaf">{STORE_NAME}</a>
-    <nav class="hidden items-center gap-1 md:flex" aria-label="Main">
-      <a href="/#menu" class={link}>Menu</a>
-      <a href="/#contact" class={link}>Contact</a>
-      <a id="header-cart" href="/cart" class="btn btn-outline ml-2">Cart (<span id="header-count">0</span>)</a>
-    </nav>
+<header class="sticky top-0 z-40 border-b border-line bg-white/95 backdrop-blur">
+  <div class="mx-auto flex max-w-[1400px] flex-wrap items-center gap-x-3 gap-y-2 px-4 py-2">
+    <button id="menu-btn" type="button" class="btn btn-outline px-0 lg:hidden" aria-expanded="false" aria-controls="mobile-nav" aria-label="Open menu">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
+    </button>
+
+    <a href="/" class="inline-flex min-h-11 items-center gap-2 font-serif text-xl font-bold text-leaf">
+      <svg width="30" height="30" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#1f5d3a" /><path d="M32 12c-12 4-18 14-16 28 12 2 22-4 24-14 1-6-2-11-8-14z" fill="#fcfbf7" /></svg>
+      <span>{STORE_NAME}</span>
+    </a>
+
+    <div class="order-last w-full lg:order-none lg:mx-auto lg:w-auto lg:max-w-xl lg:flex-1">
+      <form id="search-form" role="search" action="/shop" method="get" class="relative">
+        <label for="site-search" class="sr-only">Search products or categories</label>
+        <input
+          id="site-search" name="q" type="search" class="input pr-12" placeholder="Search products or categories"
+          autocomplete="off" role="combobox" aria-expanded="false" aria-controls="search-list" aria-autocomplete="list"
+        />
+        <button type="submit" class="absolute right-0 top-0 inline-flex h-11 w-11 items-center justify-center text-leaf" aria-label="Search">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
+        </button>
+        <ul id="search-list" role="listbox" aria-label="Search suggestions" hidden class="absolute z-50 mt-1 w-full overflow-hidden rounded-xl border border-line bg-white shadow-lg"></ul>
+      </form>
+    </div>
+
+    <a id="header-cart" href="/cart" class="btn btn-primary ml-auto lg:ml-0">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h2l2.4 11h10.2L20 7H6.2" /><circle cx="9" cy="19" r="1.5" /><circle cx="17" cy="19" r="1.5" /></svg>
+      <span class="sr-only sm:not-sr-only">Cart</span>
+      <span id="header-count" aria-label="items in cart">0</span>
+    </a>
   </div>
+
+  <nav aria-label="Main" class="hidden border-t border-line lg:block">
+    <ul class="mx-auto flex max-w-[1400px] items-center gap-1 px-4 py-1">
+      {links.map(([label, href]) => <li><a href={href} class="nav-link" aria-current={current(href)}>{label}</a></li>)}
+    </ul>
+  </nav>
+
+  <nav id="mobile-nav" aria-label="Main" hidden class="border-t border-line bg-white lg:hidden">
+    <ul class="mx-auto max-w-[1400px] px-4 py-2">
+      {links.map(([label, href]) => (
+        <li class="border-b border-line last:border-0">
+          <a href={href} class="flex min-h-12 items-center text-lg font-semibold" aria-current={current(href)}>{label}</a>
+        </li>
+      ))}
+    </ul>
+  </nav>
 </header>

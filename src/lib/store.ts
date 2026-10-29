@@ -1,4 +1,5 @@
 import * as cart from "./cart";
+import * as compare from "./compare";
 import { loadProducts, type LoadResult } from "./products";
 import type { CartLine, Product } from "./types";
 
@@ -35,12 +36,24 @@ function showStatus(r: LoadResult): void {
 }
 
 /** Loads the menu (sheet or saved copy), updates footer and notice, and refreshes the cart. */
-export async function loadMenu(force = false): Promise<LoadResult> {
+let inflight: Promise<LoadResult> | null = null;
+
+export function loadMenu(force = false): Promise<LoadResult> {
+  if (!inflight) {
+    inflight = fetchMenu(force).finally(() => {
+      inflight = null;
+    });
+  }
+  return inflight;
+}
+
+async function fetchMenu(force: boolean): Promise<LoadResult> {
   try {
     const r = await loadProducts(force);
     products = r.products;
     byId = new Map(products.map((p) => [p.id, p]));
     cart.pruneMissing(new Set(byId.keys()));
+    compare.pruneMissing(new Set(byId.keys()));
     showStatus(r);
     listeners.forEach((fn) => fn());
     return r;

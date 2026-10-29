@@ -2,16 +2,17 @@
 import Shop from "../layouts/Shop.astro";
 import Faq from "../components/Faq.astro";
 import Contact from "../components/Contact.astro";
-import { SITE_URL, STORE_NAME, WHATSAPP_NUMBER } from "../config";
+import { ABOUT_STORY, FSSAI_NUMBER, SELLER_NAME, SITE_URL, STORE_NAME, TRUST_POINTS, WHATSAPP_NUMBER } from "../config";
 import { wording } from "../lib/copy";
 
 const steps = [
-  ["Browse the menu", "Search or pick a category to find what you like."],
+  ["Browse the menu", "Search or pick a category. Every pack shows its price, size and price per 100 g."],
   ["Add to cart", "Choose the quantity for each item."],
   ["Enter your details", "Name, phone number, address and any notes."],
   ["Send on WhatsApp", "Your order opens in WhatsApp, ready to send."],
-  ["Confirm and pay", "We confirm your total and send a UPI QR. You pay only then."],
+  ["We confirm, you pay", "The seller confirms your total and shares a UPI QR separately. You pay only then."],
 ];
+const story = ABOUT_STORY || `${STORE_NAME} is run by a nurse who makes these foods in small batches and sells them directly to customers.`;
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Organization",
@@ -27,57 +28,92 @@ const jsonLd = {
 };
 ---
 <Shop title={`${STORE_NAME} | ${wording.title}`} description={wording.metaDescription} jsonLd={jsonLd}>
-  <section class="bg-leaf text-cream">
-    <div class="mx-auto max-w-[1400px] px-4 py-10 md:py-16">
-      <h1 class="max-w-3xl text-3xl font-bold md:text-5xl">{wording.title}</h1>
-      <p class="mt-4 max-w-2xl text-lg">
-        Pick your items, then send your order on WhatsApp. No online payment. We confirm your total and share a UPI QR.
-      </p>
-      <a href="#menu" class="btn mt-6 bg-cream text-leaf-dark hover:bg-cream-dark">See the menu</a>
-    </div>
-  </section>
-
-  <section id="menu" class="mx-auto max-w-[1400px] scroll-mt-16 px-4 py-8 lg:grid lg:grid-cols-[250px_1fr] lg:gap-8">
-    <aside class="lg:sticky lg:top-20 lg:self-start" aria-label="Search and filters">
-      <label for="search" class="mb-1 block font-semibold">Search the menu</label>
-      <input id="search" type="search" class="input" placeholder="Try “millet” or “snack”" autocomplete="off" />
-      <p class="mb-1 mt-4 font-semibold" id="cat-label">Categories</p>
-      <div id="chips" class="-mx-4 flex gap-2 overflow-x-auto px-4 pb-2 lg:mx-0 lg:flex-col lg:overflow-visible lg:px-0" role="group" aria-labelledby="cat-label"></div>
-    </aside>
-
-    <div class="mt-4 min-h-[60vh] lg:mt-0">
-      <p id="notice" class="mb-4 hidden rounded-lg border-2 border-saffron bg-amber-50 p-3 font-semibold" role="status"></p>
-
-      <div id="skeleton" class="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4 xl:grid-cols-4" aria-hidden="true">
-        {Array.from({ length: 8 }).map(() => <div class="skeleton aspect-[3/4]"></div>)}
+  <section class="bg-tint" aria-labelledby="hero-title">
+    <div class="mx-auto max-w-[1400px] px-4 py-10 md:py-14 lg:grid lg:grid-cols-[1.15fr_1fr] lg:items-center lg:gap-10">
+      <div>
+        <h1 id="hero-title" class="max-w-2xl text-3xl font-bold text-leaf-dark md:text-5xl">{wording.title}</h1>
+        <p class="mt-4 max-w-xl text-lg">{wording.valueProp}</p>
+        <div class="mt-6 flex flex-wrap gap-3">
+          <a href="/shop" class="btn btn-accent">Shop Now</a>
+          <a href="#featured" class="btn btn-outline">Explore Products</a>
+        </div>
       </div>
-
-      <div id="error" class="hidden rounded-xl border-2 border-red-800 bg-white p-6 text-center" role="alert">
-        <p class="text-lg font-semibold">We could not load the menu.</p>
-        <p class="mt-1">Check your internet connection and try again.</p>
-        <button id="retry" type="button" class="btn btn-primary mt-4">Retry</button>
-      </div>
-
-      <p id="empty" class="hidden rounded-xl bg-cream-dark p-6 text-center font-semibold">
-        No items match your search. Try another word or choose “All”.
-      </p>
-
-      <ul id="grid" class="hidden grid-cols-2 gap-3 md:grid-cols-3 md:gap-4 xl:grid-cols-4"></ul>
-    </div>
-  </section>
-
-  <section class="bg-cream-dark" aria-labelledby="how-title">
-    <div class="mx-auto max-w-[1400px] px-4 py-10">
-      <h2 id="how-title" class="text-2xl font-bold md:text-3xl">How ordering works</h2>
-      <ol class="mt-6 grid gap-4 md:grid-cols-5">
-        {steps.map(([t, d], i) => (
-          <li class="rounded-xl border border-line bg-cream p-4">
-            <p class="font-serif text-lg font-bold text-leaf">{i + 1}. {t}</p>
-            <p class="mt-1">{d}</p>
+      <ul class="mt-8 grid gap-3 sm:grid-cols-2 lg:mt-0" aria-label="Why customers can trust us">
+        {TRUST_POINTS.map((t) => (
+          <li class="card p-4">
+            <p class="font-serif text-lg font-bold text-leaf">{t.title}</p>
+            <p class="mt-1 text-sm">{t.text}</p>
           </li>
         ))}
-      </ol>
+      </ul>
     </div>
+  </section>
+
+  <div class="mx-auto max-w-[1400px] px-4 py-8">
+    <p id="notice" class="mb-4 hidden rounded-lg border-2 border-saffron bg-amber-50 p-3 font-semibold" role="status"></p>
+
+    <div id="home-skeleton" aria-hidden="true">
+      <div class="skeleton mb-6 h-24"></div>
+      <div class="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4 xl:grid-cols-4">
+        {Array.from({ length: 4 }).map(() => <div class="skeleton aspect-[3/4]"></div>)}
+      </div>
+    </div>
+
+    <div id="home-error" class="hidden rounded-xl border-2 border-red-800 bg-white p-6 text-center" role="alert">
+      <p class="text-lg font-semibold">We could not load the menu.</p>
+      <p class="mt-1">Check your internet connection and try again.</p>
+      <button id="retry" type="button" class="btn btn-primary mt-4">Retry</button>
+    </div>
+
+    <div id="home-content" class="hidden space-y-12">
+      <section aria-labelledby="cat-title">
+        <h2 id="cat-title" class="text-2xl font-bold md:text-3xl">Popular categories</h2>
+        <ul id="cat-tiles" class="mt-4 grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-6"></ul>
+      </section>
+
+      <section id="featured" class="scroll-mt-32" aria-labelledby="feat-title">
+        <div class="flex flex-wrap items-end justify-between gap-2">
+          <h2 id="feat-title" class="text-2xl font-bold md:text-3xl">Featured products</h2>
+          <a href="/shop" class="inline-flex min-h-11 items-center font-semibold text-leaf underline underline-offset-4">See all products</a>
+        </div>
+        <ul id="featured-grid" class="mt-4 grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4 xl:grid-cols-4"></ul>
+        <p class="mt-3 text-sm">Prices include the pack size and price per 100 g so you can compare packs easily.</p>
+      </section>
+
+      <section aria-labelledby="vid-title">
+        <div class="flex flex-wrap items-end justify-between gap-2">
+          <h2 id="vid-title" class="text-2xl font-bold md:text-3xl">Recipe videos</h2>
+          <a href="/recipes" class="inline-flex min-h-11 items-center font-semibold text-leaf underline underline-offset-4">All recipe videos</a>
+        </div>
+        <div id="video-grid" class="mt-4 grid gap-4 md:grid-cols-3"></div>
+        <p id="video-empty" class="mt-4 hidden rounded-xl bg-cream-dark p-6">
+          Recipe videos are coming soon. Message us on WhatsApp if you would like ideas for using any product.
+        </p>
+      </section>
+    </div>
+  </div>
+
+  <section class="bg-tint" aria-labelledby="seller-title">
+    <div class="mx-auto grid max-w-[1400px] gap-4 px-4 py-10 md:grid-cols-[1fr_auto] md:items-center">
+      <div>
+        <h2 id="seller-title" class="text-2xl font-bold md:text-3xl">Meet the seller</h2>
+        <p class="mt-2 max-w-2xl text-lg">{SELLER_NAME ? `${SELLER_NAME}. ` : ""}{story}</p>
+        <p class="mt-2">FSSAI Lic. No. {FSSAI_NUMBER}</p>
+      </div>
+      <a href="/about" class="btn btn-outline">More about us</a>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-[1400px] px-4 py-10" aria-labelledby="how-title">
+    <h2 id="how-title" class="text-2xl font-bold md:text-3xl">How ordering works</h2>
+    <ol class="mt-6 grid gap-4 md:grid-cols-5">
+      {steps.map(([t, d], i) => (
+        <li class="card p-4">
+          <p class="font-serif text-lg font-bold text-leaf">{i + 1}. {t}</p>
+          <p class="mt-1">{d}</p>
+        </li>
+      ))}
+    </ol>
   </section>
 
   <Faq />

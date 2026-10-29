@@ -1,7 +1,7 @@
 // The only file the owner edits besides the Google Sheet.
 
 // WhatsApp number with country code, digits only (91 = India). Example: 919876543210
-export const WHATSAPP_NUMBER ="6369431005";
+export const WHATSAPP_NUMBER = "919999999999";
 
 export const STORE_NAME = "Nurse's Kitchen";
 
@@ -25,3 +25,18 @@ export const SITE_URL = "https://your-site.netlify.app";
 
 // Offline-friendly "Add to home screen" support. Leave false until you have tested it (see docs).
 export const ENABLE_PWA = false;
+
+// ---- About and trust information (shown on the home page and the About page) ----
+// Short statements shown in the trust strip on the home page. Keep every line true.
+export const TRUST_POINTS: { title: string; text: string }[] = [
+  { title: "Made by a nurse", text: "Small batches, sold directly by the person who makes them." },
+  { title: "Know what is inside", text: "Ingredients and nutrition are listed on every product page." },
+  { title: "FSSAI number shown", text: "Our licence number is in the footer and on every product page." },
+  { title: "Pay only after we confirm", text: "No online payment. We confirm your total on WhatsApp, then send a UPI QR." },
+];
+
+// Optional text for the About page. Leave a line empty to hide it. Write only what is true.
+export const SELLER_NAME = "";
+export const ABOUT_STORY = "";
+export const PACKAGING_NOTE = "";
+export const HYGIENE_NOTE = "";

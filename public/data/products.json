@@ -16,7 +16,8 @@
   "fssai": "",
   "inStock": "TRUE",
   "videoId": "",
-  "tags": "low sugar, soup"
+  "tags": "low sugar, soup, featured",
+  "howToUse": "Mix the soup mix into hot water, stir and cook until thick. Follow the pack instructions."
  },
  {
   "id": "P002",
@@ -35,7 +36,8 @@
   "fssai": "",
   "inStock": "TRUE",
   "videoId": "",
-  "tags": "low sugar, soup"
+  "tags": "low sugar, soup",
+  "howToUse": "Stir into hot water and simmer for a few minutes. Follow the pack instructions."
  },
  {
   "id": "P003",
@@ -54,7 +56,8 @@
   "fssai": "",
   "inStock": "TRUE",
   "videoId": "",
-  "tags": "low sugar, breakfast"
+  "tags": "low sugar, breakfast, featured",
+  "howToUse": "Serve with milk or curd. Add fresh fruit if you like."
  },
  {
   "id": "P004",
@@ -73,7 +76,8 @@
   "fssai": "",
   "inStock": "TRUE",
   "videoId": "",
-  "tags": "breakfast, millet"
+  "tags": "breakfast, millet",
+  "howToUse": "Mix with water to a pouring batter, rest as per the pack, then cook on a hot pan."
  },
  {
   "id": "P005",
@@ -92,7 +96,8 @@
   "fssai": "",
   "inStock": "TRUE",
   "videoId": "",
-  "tags": "breakfast, savoury"
+  "tags": "breakfast, savoury",
+  "howToUse": "Mix with water to a smooth batter and cook on a lightly oiled pan."
  },
  {
   "id": "P006",
@@ -111,7 +116,8 @@
   "fssai": "",
   "inStock": "TRUE",
   "videoId": "",
-  "tags": "snack, wholesome"
+  "tags": "snack, wholesome, featured",
+  "howToUse": "Ready to eat. Store in an airtight box."
  },
  {
   "id": "P007",
@@ -130,7 +136,8 @@
   "fssai": "",
   "inStock": "FALSE",
   "videoId": "",
-  "tags": "snack, low sugar"
+  "tags": "snack, low sugar",
+  "howToUse": "Ready to eat. Keep the pack closed after opening."
  },
  {
   "id": "P008",
@@ -149,7 +156,8 @@
   "fssai": "",
   "inStock": "TRUE",
   "videoId": "",
-  "tags": "snack, protein"
+  "tags": "snack, protein, featured",
+  "howToUse": "Ready to eat. Good for carrying to work or night shifts."
  },
  {
   "id": "P009",
@@ -168,7 +176,8 @@
   "fssai": "",
   "inStock": "TRUE",
   "videoId": "",
-  "tags": "sweet, no refined sugar"
+  "tags": "sweet, no refined sugar, featured",
+  "howToUse": "Ready to eat. Keep in a cool, dry place."
  },
  {
   "id": "P010",
@@ -187,7 +196,8 @@
   "fssai": "",
   "inStock": "TRUE",
   "videoId": "",
-  "tags": "flour, wholesome"
+  "tags": "flour, wholesome, featured",
+  "howToUse": "Use like regular atta for rotis and parathas."
  },
  {
   "id": "P011",
@@ -206,7 +216,8 @@
   "fssai": "",
   "inStock": "TRUE",
   "videoId": "",
-  "tags": "flour, millet"
+  "tags": "flour, millet",
+  "howToUse": "Use for rotis, dosa or porridge. Follow the pack instructions."
  },
  {
   "id": "P012",
@@ -225,6 +236,7 @@
   "fssai": "",
   "inStock": "TRUE",
   "videoId": "",
-  "tags": "snack, seeds"
+  "tags": "snack, seeds",
+  "howToUse": "Ready to eat. Sprinkle on salads or curd, or eat as a snack."
  }
 ]
