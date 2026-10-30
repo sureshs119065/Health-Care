@@ -4,10 +4,12 @@ import * as compare from "../lib/compare";
 import { formatUnitPrice } from "../lib/pricing";
 import { videoPlayer } from "../lib/video";
 import { $, h } from "../lib/dom";
-import { getProduct, loadMenu } from "../lib/store";
+import { getProduct, getProducts, loadMenu } from "../lib/store";
 import type { Product } from "../lib/types";
-import { PLACEHOLDER, setVisible, toast } from "../lib/ui";
-import { formatMoney } from "../lib/whatsapp";
+import { setVisible, toast } from "../lib/ui";
+import { productCard } from "../lib/card";
+import { productImg } from "../lib/media";
+import { formatMoney, productMessage, waUrl } from "../lib/whatsapp";
 
 const id = new URLSearchParams(window.location.search).get("id") ?? "";
 
@@ -77,7 +79,7 @@ function nutritionTable(p: Product): HTMLElement | null {
   ];
   const filled = rows.filter(([, v]) => v !== "");
   if (filled.length === 0) return null;
-  return h("table", { class: "w-full max-w-md rounded-lg border border-line bg-white px-3" },
+  return h("table", { class: "w-full max-w-md" },
     h("caption", { class: "pb-2 text-left font-semibold" }, "Nutrition (per 100 g)"),
     h("tbody", {}, ...filled.map(([l, v, u]) => tableRow(l, withUnit(v, u)))));
 }
@@ -101,97 +103,137 @@ function compareButton(p: Product): HTMLElement {
   return btn;
 }
 
+function gallery(p: Product): HTMLElement {
+  const count = Math.max(1, p.images.length);
+  let cur = 0;
+  const main = productImg(p, "aspect-square w-full rounded-[1.5rem] bg-cream-dark object-cover", 800, 0, true);
+  main.setAttribute("fetchpriority", "high");
+  const thumbs: HTMLButtonElement[] = [];
+  const show = (i: number) => {
+    cur = i;
+    const t = productImg(p, "", 800, i, true);
+    main.src = t.src;
+    main.alt = t.alt;
+    thumbs.forEach((b, n) => b.setAttribute("aria-current", String(n === i)));
+  };
+  const wrap = h("div", { class: "space-y-3" }, main);
+  if (count > 1) {
+    for (let i = 0; i < count; i++) {
+      const b = h("button", {
+        type: "button",
+        class: "overflow-hidden rounded-xl border-2 border-line aria-[current=true]:border-leaf",
+        "aria-label": `Show photo ${i + 1} of ${count}`,
+        "aria-current": String(i === 0),
+        onclick: () => show(i),
+      }, productImg(p, "h-16 w-16 object-cover md:h-20 md:w-20", 160, i));
+      thumbs.push(b);
+    }
+    wrap.append(h("div", { class: "flex flex-wrap gap-2" }, ...thumbs));
+    void cur;
+  }
+  return wrap;
+}
+
 function quantityAndAdd(p: Product): HTMLElement {
+  const wa = (text: string) => `https://wa.me/${WHATSAPP_NUMBER.replace(/\D/g, "")}?text=${encodeURIComponent(text)}`;
   if (!p.inStock) {
-    const ask = `https://wa.me/${WHATSAPP_NUMBER.replace(/\D/g, "")}?text=${encodeURIComponent(`Hello, when will ${p.name} be back in stock?`)}`;
     return h("div", { class: "space-y-3" },
       h("p", { class: "font-semibold" }, "This item is sold out right now."),
-      h("a", { href: ask, target: "_blank", rel: "noopener", class: "btn btn-outline" }, "Ask when it is back"));
+      h("a", { href: wa(`Hello, when will ${p.name} be back in stock?`), target: "_blank", rel: "noopener", class: "btn btn-outline" }, "Ask when it is back"));
   }
 
   let qty = 1;
   const out = h("output", { class: "min-w-10 text-center text-xl font-bold", "aria-label": "Quantity" }, "1");
   const dec = h("button", { type: "button", class: "btn btn-outline px-0", "aria-label": "Decrease quantity", onclick: () => set(qty - 1) }, "−");
   const inc = h("button", { type: "button", class: "btn btn-outline px-0", "aria-label": "Increase quantity", onclick: () => set(qty + 1) }, "+");
+  const total = h("span", {}, formatMoney(p.price));
   function set(n: number): void {
     qty = Math.min(MAX_QTY, Math.max(1, n));
     out.textContent = String(qty);
+    total.textContent = formatMoney(p.price * qty);
     dec.disabled = qty <= 1;
     inc.disabled = qty >= MAX_QTY;
   }
   set(1);
+  const order = h("a", { href: "#", target: "_blank", rel: "noopener", class: "btn btn-whatsapp btn-lg w-full sm:w-auto" }, "Order this on WhatsApp");
+  order.addEventListener("click", () => order.setAttribute("href", waUrl(productMessage(p, qty))));
+  order.addEventListener("focus", () => order.setAttribute("href", waUrl(productMessage(p, qty))));
 
-  return h("div", { class: "space-y-3" },
-    h("div", { class: "flex items-center gap-3" }, h("span", { class: "font-semibold" }, "Quantity"), dec, out, inc),
-    h("button", {
-      type: "button",
-      class: "btn btn-primary w-full md:w-auto md:min-w-56",
-      onclick: () => {
-        cart.add(p.id, qty);
-        toast(`${qty} x ${p.name} added to cart.`);
-      },
-    }, "Add to cart"),
-    h("p", {}, h("a", { href: "/cart", class: "font-semibold text-leaf underline underline-offset-2" }, "View cart")));
+  return h("div", { class: "space-y-4 rounded-2xl bg-cream-dark p-4" },
+    h("div", { class: "flex flex-wrap items-center gap-3" },
+      h("span", { class: "font-semibold" }, "Quantity"), dec, out, inc,
+      h("span", { class: "ml-auto text-lg font-bold" }, "Total ", total)),
+    h("div", { class: "flex flex-col gap-3 sm:flex-row" },
+      h("button", {
+        type: "button",
+        class: "btn btn-accent btn-lg flex-1",
+        onclick: () => {
+          cart.add(p.id, qty);
+          toast(`${qty} x ${p.name} added to cart.`);
+        },
+      }, "Add to cart"),
+      order),
+    h("p", { class: "text-sm text-muted" }, "WhatsApp opens with this item written for you. We confirm the total before you pay. ",
+      h("a", { href: "/cart", class: "font-semibold text-leaf underline underline-offset-2" }, "View cart")));
+}
+
+function infoCard(id: string, title: string, ...kids: (Node | string)[]): HTMLElement {
+  return h("section", { class: "card p-5", "aria-labelledby": id }, h("h2", { id, class: "mb-2 text-xl font-bold" }, title), ...kids);
+}
+
+function related(p: Product): HTMLElement | null {
+  const others = getProducts().filter((x) => x.id !== p.id);
+  const same = others.filter((x) => x.category === p.category);
+  const rest = others.filter((x) => x.category !== p.category && x.inStock);
+  const picks = [...same, ...rest].slice(0, 4);
+  if (!picks.length) return null;
+  return h("section", { class: "mt-12", "aria-labelledby": "rel-title" },
+    h("h2", { id: "rel-title", class: "section-title" }, same.length ? "More from this range" : "You may also like"),
+    h("ul", { class: "mt-4 grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4" }, ...picks.map(productCard)));
 }
 
 function render(p: Product): void {
   setMeta(p);
-  const img = h("img", {
-    src: p.image || PLACEHOLDER,
-    alt: p.name,
-    width: "800",
-    height: "800",
-    fetchpriority: "high",
-    class: "aspect-square w-full rounded-xl bg-cream-dark object-cover",
-  });
-  img.addEventListener("error", () => {
-    if (!img.src.endsWith(PLACEHOLDER)) img.src = PLACEHOLDER;
-  });
+  document.getElementById("crumb-cat")?.replaceChildren(h("a", { href: `/shop?category=${encodeURIComponent(p.category)}`, class: "underline-offset-2 hover:underline" }, p.category));
+  document.getElementById("crumb-name")!.textContent = p.name;
 
-  const details: [string, string][] = [
-    ["Category", p.category],
-    ["Weight", p.weight],
-    ["FSSAI Lic. No.", p.fssai || FSSAI_NUMBER],
-  ];
   const nutrition = nutritionTable(p);
   const video = videoBlock(p);
+  const unit = formatUnitPrice(p);
+  const rel = related(p);
 
   const info = h("div", { class: "space-y-4" },
-    h("p", { class: "font-semibold text-leaf" }, p.category),
-    h("h1", { class: "text-3xl font-bold" }, p.name),
-    h("p", { class: "text-2xl font-bold text-leaf" }, formatMoney(p.price), p.weight ? ` / ${p.weight}` : ""),
-    formatUnitPrice(p) ? h("p", { class: "text-sm" }, `Price per 100 g or ml: ${formatUnitPrice(p)}`) : h("span"),
+    h("p", {}, h("a", { href: `/shop?category=${encodeURIComponent(p.category)}`, class: "font-semibold text-leaf underline-offset-2 hover:underline" }, p.category)),
+    h("h1", { class: "text-3xl font-bold md:text-4xl" }, p.name),
+    h("p", { class: "flex flex-wrap items-baseline gap-x-3 text-3xl font-bold" }, formatMoney(p.price),
+      p.weight ? h("span", { class: "text-lg font-medium text-muted" }, `Pack size ${p.weight}`) : h("span")),
+    unit ? h("p", { class: "text-sm text-muted" }, unit) : h("span"),
     h("p", {
-      class: p.inStock
-        ? "inline-block rounded-md border-2 border-leaf px-3 py-1 font-semibold text-leaf"
-        : "inline-block rounded-md bg-ink px-3 py-1 font-semibold text-white",
+      class: p.inStock ? "badge bg-tint px-3 py-1 text-sm text-leaf" : "badge bg-ink px-3 py-1 text-sm text-white",
     }, p.inStock ? "In stock" : "Sold out"),
     p.shortDescription ? h("p", { class: "max-w-prose text-lg" }, p.shortDescription) : h("span"),
     quantityAndAdd(p),
-    compareButton(p),
-    h("p", { class: "text-sm" }, "The total is confirmed by the owner on WhatsApp before you pay."));
+    compareButton(p));
 
   const article = $("#product");
   article.replaceChildren(
-    h("div", { class: "grid gap-6 md:grid-cols-2 md:gap-10" }, img, info),
-    h("div", { class: "mt-8 grid gap-8 md:grid-cols-2" },
-      h("section", { "aria-labelledby": "ing-title" },
-        h("h2", { id: "ing-title", class: "mb-2 text-xl font-bold" }, "Ingredients"),
-        h("p", { class: "max-w-prose" }, p.ingredients || "Ask us on WhatsApp for the full ingredient list.")),
+    h("div", { class: "grid gap-6 md:grid-cols-2 md:gap-10" }, gallery(p), info),
+    h("div", { class: "mt-10 grid gap-4 md:grid-cols-2" },
+      infoCard("ing-title", "Ingredients", h("p", { class: "max-w-prose" }, p.ingredients || "Ask us on WhatsApp for the full ingredient list.")),
       nutrition
-        ? h("section", { "aria-labelledby": "nut-title" },
-            h("h2", { id: "nut-title", class: "mb-2 text-xl font-bold" }, "Nutrition"), nutrition,
-            h("p", { class: "mt-2 max-w-md text-sm" }, "Values are per 100 g, as supplied by the seller. Your portion may be smaller or larger."))
-        : h("span")),
-    ...(p.howToUse
-      ? [h("section", { class: "mt-8", "aria-labelledby": "use-title" },
-          h("h2", { id: "use-title", class: "mb-2 text-xl font-bold" }, "How to use"),
-          h("p", { class: "max-w-prose" }, p.howToUse))]
-      : []),
-    h("dl", { class: "mt-8 grid max-w-md grid-cols-[auto_1fr] gap-x-4 gap-y-1" },
-      ...details.flatMap(([k, v]) => (v ? [h("dt", { class: "font-semibold" }, k), h("dd", {}, v)] : []))),
+        ? infoCard("nut-title", "Nutrition", nutrition,
+            h("p", { class: "mt-2 max-w-md text-sm text-muted" }, "Values are per 100 g, as supplied by the seller. Your portion may be smaller or larger."))
+        : h("span"),
+      p.howToUse ? infoCard("use-title", "How to use", h("p", { class: "max-w-prose" }, p.howToUse)) : h("span"),
+      infoCard("q-title", "Quality information",
+        h("dl", { class: "grid grid-cols-[auto_1fr] gap-x-4 gap-y-1" },
+          h("dt", { class: "font-semibold" }, "FSSAI Lic. No."), h("dd", {}, p.fssai || FSSAI_NUMBER),
+          h("dt", { class: "font-semibold" }, "Category"), h("dd", {}, p.category),
+          ...(p.weight ? [h("dt", { class: "font-semibold" }, "Pack size"), h("dd", {}, p.weight)] : [])),
+        h("p", { class: "mt-3 text-sm" }, h("a", { href: "/quality", class: "font-semibold text-leaf underline underline-offset-4" }, "What we check and what we do not claim")))),
     ...(video ? [video] : []),
-    h("p", { class: "mt-8 max-w-prose text-sm" }, "Not a substitute for medical advice. Consult your doctor or dietitian."));
+    ...(rel ? [rel] : []),
+    h("p", { class: "mt-8 max-w-prose text-sm text-muted" }, "Not a substitute for medical advice. Consult your doctor or dietitian."));
 }
 
 async function init(force = false): Promise<void> {

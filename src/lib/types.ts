@@ -5,6 +5,8 @@ export interface Product {
   price: number;
   weight: string;
   image: string;
+  /** Every photo for the gallery (the sheet image column may list several, separated by |). */
+  images: string[];
   shortDescription: string;
   ingredients: string;
   calories: string;

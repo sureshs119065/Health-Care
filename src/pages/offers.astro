@@ -1,0 +1,52 @@
+---
+import Shop from "../layouts/Shop.astro";
+import PromoBanner from "../components/PromoBanner.astro";
+import { BUNDLES, OFFERS, STORE_NAME } from "../config";
+---
+<Shop title={`Offers and sets | ${STORE_NAME}`} description="Current offers, ready-made sets and the best price per 100 g.">
+  <div class="container-x py-8 md:py-12">
+    <nav aria-label="Breadcrumb" class="text-sm text-muted"><a href="/" class="underline-offset-2 hover:underline">Home</a> <span aria-hidden="true">/</span> <span aria-current="page">Offers</span></nav>
+    <h1 class="mt-3 text-3xl font-bold md:text-4xl">Offers</h1>
+    <p class="section-sub">Only offers we are really running appear here.</p>
+
+    <p id="notice" class="mt-4 hidden rounded-xl border-2 border-saffron bg-amber-50 p-3 font-semibold" role="status"></p>
+
+    {OFFERS.length > 0 ? (
+      <ul class="mt-6 grid gap-4 md:grid-cols-2">
+        {OFFERS.map((o) => <li><PromoBanner title={o.title} text={o.text} cta={o.cta} href={o.href} tone="berry" badge="Offer" size="lg" /></li>)}
+      </ul>
+    ) : (
+      <div class="mt-6 rounded-2xl bg-tint p-6 md:p-8">
+        <h2 class="text-xl font-bold">No special offer running right now</h2>
+        <p class="mt-2 max-w-prose">We would rather show you true prices than invent a sale. Two ways to spend less today:</p>
+        <div class="mt-4 flex flex-wrap gap-3">
+          <a href="/shop?sort=unit-asc" class="btn btn-primary">See lowest price per 100 g</a>
+          <a href="#sets" class="btn btn-outline">View ready-made sets</a>
+        </div>
+      </div>
+    )}
+
+    {BUNDLES.length > 0 && (
+      <section id="sets" class="mt-12 scroll-mt-32" aria-labelledby="sets-title">
+        <h2 id="sets-title" class="section-title">Ready-made sets</h2>
+        <p class="section-sub">Add a few products in one tap. Prices are the same as buying each item separately.</p>
+        <ul id="bundle-list" class="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-3"></ul>
+        <p id="bundle-empty" class="mt-4 hidden rounded-xl bg-cream-dark p-6">Sets will appear here once the product list has loaded.</p>
+      </section>
+    )}
+  </div>
+  <script>
+    import { $ } from "../lib/dom";
+    import { loadMenu } from "../lib/store";
+    import { renderBundles } from "../lib/bundles";
+    const list = document.getElementById("bundle-list");
+    if (list) {
+      loadMenu()
+        .then(() => {
+          const n = renderBundles(list);
+          $("#bundle-empty").classList.toggle("hidden", n > 0);
+        })
+        .catch(() => $("#bundle-empty").classList.remove("hidden"));
+    }
+  </script>
+</Shop>

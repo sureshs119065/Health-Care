@@ -3,28 +3,28 @@ import Shop from "../layouts/Shop.astro";
 import { STORE_NAME } from "../config";
 ---
 <Shop title={`Recipe Videos | ${STORE_NAME}`} description="Short videos and tips on how to use each product.">
-  <div class="mx-auto max-w-[1400px] px-4 py-6">
-    <h1 class="text-3xl font-bold">Recipe videos</h1>
+  <div class="container-x py-8 md:py-10">
+    <h1 class="text-3xl font-bold md:text-4xl">Recipe videos</h1>
     <p class="mt-1 max-w-2xl">See how each product is used. Videos load only when you tap play.</p>
 
-    <p id="notice" class="mt-4 hidden rounded-lg border-2 border-saffron bg-amber-50 p-3 font-semibold" role="status"></p>
+    <p id="notice" class="mt-4 hidden rounded-2xl border-2 border-saffron bg-amber-50 p-3 font-semibold" role="status"></p>
 
-    <div id="skeleton" class="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3" aria-hidden="true">
-      {Array.from({ length: 3 }).map(() => <div class="skeleton aspect-video"></div>)}
+    <div id="skeleton" class="mt-6 grid grid-cols-2 gap-4 md:grid-cols-4 xl:grid-cols-5" aria-hidden="true">
+      {Array.from({ length: 5 }).map(() => <div class="skeleton aspect-[9/16]"></div>)}
     </div>
 
-    <div id="error" class="mt-6 hidden rounded-xl border-2 border-red-800 bg-white p-6 text-center" role="alert">
+    <div id="error" class="mt-6 hidden rounded-2xl border-2 border-red-800 bg-white p-6 text-center" role="alert">
       <p class="text-lg font-semibold">We could not load the videos.</p>
       <button id="retry" type="button" class="btn btn-primary mt-4">Retry</button>
     </div>
 
-    <div id="empty" class="mt-6 hidden rounded-xl bg-cream-dark p-8 text-center">
+    <div id="empty" class="mt-6 hidden rounded-2xl bg-cream-dark p-8 text-center">
       <p class="text-lg font-semibold">Recipe videos are coming soon.</p>
       <p class="mt-1">In the meantime you can browse the menu or ask us on WhatsApp how to use a product.</p>
-      <a href="/shop" class="btn btn-primary mt-4">Browse the menu</a>
+      <a href="/shop" class="btn btn-primary mt-4">Browse products</a>
     </div>
 
-    <div id="video-grid" class="mt-6 hidden gap-4 md:grid-cols-2 xl:grid-cols-3"></div>
+    <ul id="video-grid" class="mt-6 hidden grid-cols-2 gap-4 md:grid-cols-4 xl:grid-cols-5"></ul>
   </div>
 
   <script>

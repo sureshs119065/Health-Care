@@ -1,0 +1,35 @@
+---
+// Reusable campaign banner. Change the props (or src/config.ts) and the whole homepage promo area follows.
+import { artSvg, type ArtKind } from "../lib/art";
+interface Props {
+  title: string;
+  text: string;
+  cta: string;
+  href: string;
+  tone?: "leaf" | "marigold" | "berry" | "mist";
+  art?: string; // product category used to pick the illustration
+  image?: string; // optional photo, replaces the illustration
+  size?: "lg" | "sm";
+  badge?: string; // only pass a badge for something that is true (for example "Offer")
+}
+const { title, text, cta, href, tone = "leaf", art = "", image = "", size = "sm", badge } = Astro.props;
+const tones = {
+  leaf: "bg-leaf-dark text-white",
+  marigold: "bg-accent text-ink",
+  berry: "bg-berry text-white",
+  mist: "bg-tint text-leaf-dark",
+};
+const btn = tone === "marigold" || tone === "mist" ? "btn-primary" : "btn-accent";
+const svg = art ? artSvg(art, 1) : "";
+---
+<article class={`relative isolate flex overflow-hidden rounded-[1.5rem] ${tones[tone]} ${size === "lg" ? "min-h-72 p-6 md:p-10" : "min-h-44 p-5"}`}>
+  <div class="relative z-10 flex max-w-[62%] flex-col items-start justify-center gap-2 sm:max-w-[58%]">
+    {badge && <span class="badge bg-white/95 text-berry">{badge}</span>}
+    <h3 class={size === "lg" ? "text-3xl font-bold md:text-4xl" : "text-xl font-bold md:text-2xl"}>{title}</h3>
+    <p class={size === "lg" ? "text-lg opacity-90" : "opacity-90"}>{text}</p>
+    <a href={href} class={`btn ${btn} mt-2`}>{cta}</a>
+  </div>
+  {image
+    ? <img src={image} alt="" width="400" height="400" loading="lazy" class="absolute inset-y-0 right-0 -z-0 h-full w-2/5 object-cover" />
+    : svg && <div class="absolute -bottom-6 -right-6 -z-0 w-[48%] max-w-72 rotate-6 overflow-hidden rounded-[2rem] shadow-[var(--shadow-pop)]" aria-hidden="true" set:html={svg.replace("<svg ", '<svg width="100%" height="100%" ')}></div>}
+</article>

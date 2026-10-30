@@ -17,7 +17,7 @@ export function buildMessage(lines: CartLine[], d: CheckoutData): string {
     "",
     ...items,
     "",
-    `Grand total: ${formatMoney(grandTotal(lines))}`,
+    `Subtotal: ${formatMoney(grandTotal(lines))}`,
     "(This total will be confirmed by the owner, including delivery if any.)",
     "",
     `Name: ${d.name}`,
@@ -26,6 +26,17 @@ export function buildMessage(lines: CartLine[], d: CheckoutData): string {
     `Notes: ${d.notes || "None"}`,
     "",
     "Please confirm the total and send the UPI QR.",
+  ].join("\n");
+}
+
+/** One-item order or enquiry opened straight from a product page. */
+export function productMessage(p: { name: string; weight: string; price: number }, qty: number): string {
+  return [
+    `Hello ${STORE_NAME}, I would like to order:`,
+    "",
+    `${p.name}${p.weight ? ` (${p.weight})` : ""}: ${qty} x ${formatMoney(p.price)} = ${formatMoney(p.price * qty)}`,
+    "",
+    "Please confirm the total, delivery and how to pay by UPI.",
   ].join("\n");
 }
 

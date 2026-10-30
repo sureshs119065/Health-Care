@@ -1,76 +1,105 @@
-import { $, h } from "../lib/dom";
+import { BESTSELLER_TAG, BUNDLES } from "../config";
+import { artUri } from "../lib/art";
+import { renderBundles } from "../lib/bundles";
 import { productCard } from "../lib/card";
+import { arrowButton, initCarousel } from "../lib/carousel";
+import { $, h } from "../lib/dom";
+import { productImg } from "../lib/media";
+import { reelCard } from "../lib/reels";
 import { getProducts, loadMenu } from "../lib/store";
+import type { Product } from "../lib/types";
 import { setVisible } from "../lib/ui";
-import { videoPlayer } from "../lib/video";
-import * as cart from "../lib/cart";
-import { toast } from "../lib/ui";
 
 function renderCategories(): void {
-  const counts = new Map<string, number>();
-  for (const p of getProducts()) counts.set(p.category, (counts.get(p.category) ?? 0) + 1);
-  const top = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).slice(0, 6);
+  const groups = new Map<string, Product[]>();
+  for (const p of getProducts()) groups.set(p.category, [...(groups.get(p.category) ?? []), p]);
+  const top = [...groups.entries()].sort((a, b) => b[1].length - a[1].length || a[0].localeCompare(b[0])).slice(0, 6);
   $("#cat-tiles").replaceChildren(
-    ...top.map(([name, n]) =>
-      h("li", {},
+    ...top.map(([name, items]) => {
+      const photo = items.find((p) => p.image)?.image;
+      return h("li", {},
         h("a", {
           href: `/shop?category=${encodeURIComponent(name)}`,
-          class: "card flex min-h-24 flex-col justify-center p-4 transition-shadow hover:shadow-md",
+          class: "card group block overflow-hidden transition hover:-translate-y-0.5 hover:border-leaf hover:shadow-[var(--shadow-lift)]",
         },
-          h("span", { class: "font-serif text-lg font-bold text-leaf" }, name),
-          h("span", { class: "text-sm" }, n === 1 ? "1 item" : `${n} items`))),
-    ),
+          h("img", { src: photo || artUri(name, "cat"), alt: "", width: "240", height: "240", loading: "lazy", class: "aspect-square w-full object-cover transition duration-300 group-hover:scale-[1.04]" }),
+          h("span", { class: "block p-3" },
+            h("span", { class: "block font-display text-lg font-bold leading-tight" }, name),
+            h("span", { class: "text-sm text-muted" }, items.length === 1 ? "1 item" : `${items.length} items`))));
+    }),
   );
 }
 
-function renderFeatured(): void {
+function bestsellers(): Product[] {
   const inStock = getProducts().filter((p) => p.inStock);
-  const tagged = inStock.filter((p) => p.tags.some((t) => t.toLowerCase() === "featured"));
-  const picks = (tagged.length ? tagged : inStock).slice(0, 8);
-  $("#featured-grid").replaceChildren(...picks.map(productCard));
+  const tagged = inStock.filter((p) => p.tags.some((t) => t.toLowerCase() === BESTSELLER_TAG.toLowerCase()));
+  return (tagged.length ? tagged : inStock).slice(0, 10);
 }
 
-function renderVideos(): void {
-  const withVideo = getProducts().filter((p) => p.videoId).slice(0, 3);
-  $("#video-grid").replaceChildren(
-    ...withVideo.map((p) =>
-      h("article", { class: "card overflow-hidden" },
-        videoPlayer(p),
-        h("div", { class: "space-y-2 p-4" },
-          h("h3", { class: "font-bold" }, p.name),
-          p.howToUse ? h("p", { class: "text-sm" }, p.howToUse) : h("span"),
-          h("div", { class: "flex flex-wrap gap-2" },
-            h("a", { href: `/product?id=${encodeURIComponent(p.id)}`, class: "btn btn-outline" }, "View product"),
-            p.inStock
-              ? h("button", {
-                  type: "button",
-                  class: "btn btn-primary",
-                  onclick: () => {
-                    cart.add(p.id);
-                    toast(`${p.name} added to cart.`);
-                  },
-                }, "Add to cart")
-              : h("span")))),
-    ),
+function renderBest(): Product[] {
+  const picks = bestsellers();
+  const track = $("#best-track");
+  track.replaceChildren(...picks.map((p) => {
+    const li = productCard(p);
+    li.classList.add("w-[46vw]", "max-w-[260px]", "shrink-0", "md:w-60");
+    return li;
+  }));
+  const holder = $("#best-arrows");
+  const prev = arrowButton("prev", "Previous products");
+  const next = arrowButton("next", "Next products");
+  holder.replaceChildren(prev, next);
+  initCarousel(track, prev, next);
+  return picks;
+}
+
+function renderReels(): void {
+  const all = getProducts();
+  const withVideo = all.filter((p) => p.videoId).slice(0, 8);
+  const list = withVideo.length ? withVideo : all.filter((p) => p.inStock).slice(0, 6);
+  if (withVideo.length === 0) {
+    $("#reel-sub").textContent = "Product videos are on the way. Until then, tap any card to see the product.";
+  }
+  const track = $("#reel-track");
+  track.replaceChildren(...list.map((p) => reelCard(p, true)));
+  const holder = $("#reel-arrows");
+  const prev = arrowButton("prev", "Previous videos");
+  const next = arrowButton("next", "Next videos");
+  holder.replaceChildren(prev, next);
+  initCarousel(track, prev, next);
+}
+
+function renderUse(exclude: Set<string>): void {
+  const withUse = getProducts().filter((p) => p.howToUse);
+  const fresh = withUse.filter((p) => !exclude.has(p.id));
+  const picks = [...fresh, ...withUse.filter((p) => exclude.has(p.id))].slice(0, 4);
+  $("#use-grid").replaceChildren(
+    ...picks.map((p) =>
+      h("li", { class: "card flex flex-col overflow-hidden" },
+        h("a", { href: `/product?id=${encodeURIComponent(p.id)}`, tabindex: "-1", "aria-hidden": "true" },
+          productImg(p, "aspect-[16/10] w-full bg-cream-dark object-cover", 400)),
+        h("div", { class: "flex flex-1 flex-col gap-2 p-4" },
+          h("h3", { class: "text-lg font-bold" }, p.name),
+          h("p", { class: "text-muted" }, p.howToUse),
+          h("a", { href: `/product?id=${encodeURIComponent(p.id)}`, class: "link-more mt-auto" }, p.videoId ? "Watch and view product" : "View product")))),
   );
-  setVisible($("#video-empty"), withVideo.length === 0);
-  setVisible($("#video-grid"), withVideo.length > 0, "grid");
 }
 
 async function init(force = false): Promise<void> {
-  setVisible($("#home-skeleton"), true);
   setVisible($("#home-error"), false);
-  setVisible($("#home-content"), false);
   try {
     await loadMenu(force);
     renderCategories();
-    renderFeatured();
-    renderVideos();
-    setVisible($("#home-skeleton"), false);
-    setVisible($("#home-content"), true);
+    const picks = renderBest();
+    renderReels();
+    renderUse(new Set(picks.map((p) => p.id)));
+    const sets = document.getElementById("bundle-list");
+    if (sets && BUNDLES.length) {
+      const n = renderBundles(sets);
+      if (n === 0) sets.closest("section")?.remove();
+    }
   } catch (err) {
     console.error(err);
-    setVisible($("#home-skeleton"), false);
+    for (const id of ["cat-tiles", "best-track", "reel-track", "use-grid", "bundle-list"]) document.getElementById(id)?.replaceChildren();
     setVisible($("#home-error"), true);
   }
 }

@@ -20,7 +20,12 @@ function renderShell(): void {
 
   for (const id of ["header-count", "bar-count"]) {
     const el = byId(id);
-    if (el) el.textContent = String(count);
+    if (el && el.textContent !== String(count)) {
+      el.textContent = String(count);
+      el.classList.remove("bump");
+      void el.offsetWidth;
+      el.classList.add("bump");
+    }
   }
   const bar = byId("cart-bar");
   if (bar) {
@@ -36,7 +41,7 @@ function renderDrawer(itemCount: number, lines: ReturnType<typeof getLines>, tot
   setVisible(list, lines.length > 0);
 
   const empty = $("#cart-empty");
-  empty.textContent = itemCount > 0 ? "Loading your cart…" : "Your cart is empty. Add something from the menu.";
+  empty.textContent = itemCount > 0 ? "Loading your cart…" : "Your cart is empty. Add something from the shop.";
   setVisible(empty, lines.length === 0);
 
   const soldOut = lines.filter((l) => !l.p.inStock);

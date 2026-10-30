@@ -9,7 +9,7 @@ export const COLUMNS = [
   "inStock", "videoId", "tags", "howToUse",
 ] as const;
 
-const CACHE_KEY = "products:v1";
+const CACHE_KEY = "products:v2";
 
 export interface LoadResult {
   products: Product[];
@@ -46,7 +46,10 @@ export function rowsToProducts(rows: string[][]): Product[] {
     }
     seen.add(id);
 
-    const image = get("image");
+    const images = get("image")
+      .split("|")
+      .map((u) => u.trim())
+      .filter((u) => /^(https?:\/\/|\/)/i.test(u));
     const videoId = get("videoId");
     out.push({
       id,
@@ -54,7 +57,8 @@ export function rowsToProducts(rows: string[][]): Product[] {
       category: cleanClaims(get("category")) || "Other",
       price,
       weight: get("weight"),
-      image: /^(https?:\/\/|\/)/i.test(image) ? image : "",
+      image: images[0] ?? "",
+      images,
       shortDescription: cleanClaims(get("shortDescription")),
       ingredients: cleanClaims(get("ingredients")),
       calories: get("calories"),

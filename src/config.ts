@@ -40,3 +40,63 @@ export const SELLER_NAME = "";
 export const ABOUT_STORY = "";
 export const PACKAGING_NOTE = "";
 export const HYGIENE_NOTE = "";
+
+// ====================================================================
+// Storefront content (Task 6 redesign). Everything below is optional and
+// editable. Leave a list empty to hide the matching section. Write only
+// what is true: nothing here is filled with made-up offers or claims.
+// ====================================================================
+
+// Slim bar above the header. Rotates if you add more than one message.
+// Add `href` to make a message a link. Do not add discounts or delivery promises unless they are real.
+export const ANNOUNCEMENTS: { text: string; href?: string }[] = [
+  { text: "Order on WhatsApp. You pay by UPI only after we confirm your total.", href: "/how-to-order" },
+];
+
+// Real offers only (a discount you really run). Leave empty until you have one.
+// Example: { title: "Festival week", text: "10% off Sweets until 20 Nov", href: "/shop?category=Sweets", cta: "Shop sweets" }
+export const OFFERS: { title: string; text: string; href: string; cta: string }[] = [];
+
+// Hero picture. Use a path under /public (for example "/images/hero.jpg"). Empty = illustrated pack tiles.
+export const HERO_IMAGE = "";
+
+// Product tag that marks your "Bestsellers" in the Google Sheet tags column.
+// The site has no sales data, so these are the items YOU mark with this tag.
+export const BESTSELLER_TAG = "featured";
+
+// Ready-made sets. Each set lists product ids from the sheet. The price shown is the plain sum of
+// the items (no discount). Delete the sets, or the whole list, to hide the section.
+export const BUNDLES: { title: string; text: string; ids: string[] }[] = [
+  { title: "Breakfast set", text: "Muesli, dosa mix and chilla mix for a week of quick mornings.", ids: ["P003", "P004", "P005"] },
+  { title: "Soup night set", text: "Both soup mixes in one go.", ids: ["P001", "P002"] },
+  { title: "Snack box", text: "Ragi cookies, roasted chana and mixed seeds for the bag or the night shift.", ids: ["P006", "P008", "P012"] },
+];
+
+// "Shop by need" shortcuts. Each links to the shop with a filter. Edit the wording freely.
+export const NEEDS: { title: string; text: string; href: string }[] = [
+  { title: "Grab-and-go snacks", text: "Small packs you can keep in your bag.", href: "/shop?category=Snacks" },
+  { title: "Quick breakfasts", text: "Mixes and muesli that are ready in minutes.", href: "/shop?category=Breakfast" },
+  { title: "Family packs", text: "Packs of 400 g and above for the whole household.", href: "/shop?pack=large" },
+  { title: "Everyday staples", text: "Flours for the daily roti, dosa and porridge.", href: "/shop?category=Flours" },
+  { title: "Best price per 100 g", text: "Every product sorted by what you really pay.", href: "/shop?sort=unit-asc" },
+];
+
+// Footer social links. Leave empty to hide. Example: { label: "Instagram", href: "https://instagram.com/yourname" }
+export const SOCIAL_LINKS: { label: string; href: string }[] = [];
+
+// Business details shown at the bottom of the footer. Leave a line empty to hide it.
+export const BUSINESS_NAME = "";
+export const BUSINESS_ADDRESS = "";
+
+// Policy text. Each line becomes one paragraph. The Returns page and its footer link appear only when this is filled in.
+export const RETURNS_POLICY: string[] = [];
+// Delivery text. If empty, the page explains the general WhatsApp confirmation steps and shows your delivery area.
+export const DELIVERY_POLICY: string[] = [];
+
+// Homepage campaign banners (reusable component). Each one links to a collection, not to a made-up sale.
+// `art` picks the illustration (a product category name). `tone`: leaf | marigold | mist | berry.
+export const CAMPAIGNS: { title: string; text: string; cta: string; href: string; tone: "leaf" | "marigold" | "mist" | "berry"; art: string; image?: string }[] = [
+  { title: "Breakfast, ready in minutes", text: "Muesli, dosa mix and chilla mix. Pick one and your morning is sorted.", cta: "Shop breakfast", href: "/shop?category=Breakfast", tone: "marigold", art: "Breakfast" },
+  { title: "Best price per 100 g", text: "Every product sorted by what you actually pay.", cta: "Compare prices", href: "/shop?sort=unit-asc", tone: "mist", art: "Flours" },
+  { title: "Snacks for your bag", text: "Roasted, wholesome and easy to carry.", cta: "Shop snacks", href: "/shop?category=Snacks", tone: "leaf", art: "Snacks" },
+];

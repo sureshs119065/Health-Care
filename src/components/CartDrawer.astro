@@ -8,7 +8,7 @@ import CheckoutForm from "./CheckoutForm.astro";
     role="dialog"
     aria-modal="true"
     aria-labelledby="drawer-title"
-    class="absolute right-0 top-0 flex h-full w-full max-w-md translate-x-full flex-col bg-cream shadow-xl transition-transform duration-300"
+    class="absolute right-0 top-0 flex h-full w-full max-w-md translate-x-full flex-col bg-white shadow-xl transition-transform duration-300"
   >
     <div class="flex items-center justify-between border-b border-line p-4">
       <h2 id="drawer-title" class="text-xl font-bold">Your cart</h2>
@@ -17,12 +17,13 @@ import CheckoutForm from "./CheckoutForm.astro";
 
     <section id="view-cart" class="flex min-h-0 flex-1 flex-col">
       <ul id="cart-list" class="flex-1 divide-y divide-line overflow-y-auto px-4"></ul>
-      <p id="cart-empty" class="hidden flex-1 p-6 text-center">Your cart is empty. Add something from the menu.</p>
+      <p id="cart-empty" class="hidden flex-1 p-6 text-center">Your cart is empty. Add something from the shop.</p>
       <div class="space-y-3 border-t border-line p-4">
         <p id="cart-warning" class="hidden font-semibold text-red-800"></p>
-        <p class="flex justify-between text-lg font-bold"><span>Estimated total</span><span id="cart-total">₹0</span></p>
-        <p class="text-sm">We confirm the final total on WhatsApp before you pay.</p>
-        <button id="to-checkout" type="button" class="btn btn-primary w-full">Checkout</button>
+        <p class="flex justify-between text-lg font-bold"><span>Subtotal</span><span id="cart-total">₹0</span></p>
+        <p class="flex justify-between text-sm text-muted"><span>Delivery</span><span>Confirmed on WhatsApp</span></p>
+        <p class="text-sm text-muted">We confirm the final total on WhatsApp before you pay.</p>
+        <button id="to-checkout" type="button" class="btn btn-accent btn-lg w-full">Checkout</button>
       </div>
     </section>
 
