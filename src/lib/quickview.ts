@@ -41,7 +41,7 @@ export function openQuickView(p: Product, from?: HTMLElement): void {
   const href = `/product?id=${encodeURIComponent(p.id)}`;
   const close = h("button", {
     type: "button",
-    class: "absolute right-3 top-3 z-10 inline-flex h-11 w-11 items-center justify-center rounded-full bg-white text-ink shadow-md hover:bg-cream-dark",
+    class: "absolute right-3 top-3 z-10 inline-flex h-11 w-11 items-center justify-center rounded-full bg-surface text-fg shadow-md hover:bg-cream-dark",
     "aria-label": "Close quick view",
     onclick: () => d.close(),
   });
@@ -49,7 +49,7 @@ export function openQuickView(p: Product, from?: HTMLElement): void {
 
   const unit = formatUnitPrice(p);
   d.replaceChildren(
-    h("div", { class: "relative grid max-h-[calc(100dvh-1.5rem)] overflow-y-auto rounded-[1.5rem] bg-white shadow-[var(--shadow-pop)] md:grid-cols-2" },
+    h("div", { class: "relative grid max-h-[calc(100dvh-1.5rem)] overflow-y-auto rounded-[1.5rem] bg-surface shadow-[var(--shadow-pop)] md:grid-cols-2" },
       close,
       productImg(p, "aspect-square w-full bg-cream-dark object-cover", 640, 0, true),
       h("div", { class: "flex flex-col gap-3 p-5 md:p-7" },
@@ -57,7 +57,7 @@ export function openQuickView(p: Product, from?: HTMLElement): void {
         h("h2", { id: "qv-title", class: "text-2xl font-bold" }, p.name),
         h("p", { class: "text-3xl font-bold" }, formatMoney(p.price), h("span", { class: "ml-2 text-base font-medium text-muted" }, p.weight)),
         unit ? h("p", { class: "text-sm text-muted" }, unit) : h("span"),
-        h("p", { class: p.inStock ? "badge w-fit bg-tint text-leaf" : "badge w-fit bg-ink text-white" }, p.inStock ? "In stock" : "Sold out"),
+        h("p", { class: p.inStock ? "badge w-fit bg-tint text-leaf" : "badge w-fit bg-fg text-white" }, p.inStock ? "In stock" : "Sold out"),
         p.shortDescription ? h("p", {}, p.shortDescription) : h("span"),
         p.inStock
           ? h("div", { class: "mt-1 flex flex-wrap items-center gap-3" },

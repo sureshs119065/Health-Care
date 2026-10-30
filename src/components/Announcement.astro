@@ -2,13 +2,26 @@
 import { ANNOUNCEMENTS } from "../config";
 ---
 {ANNOUNCEMENTS.length > 0 && (
-  <div id="announce" class="bg-leaf-dark text-white" role="region" aria-label="Announcements">
-    <div class="container-x flex min-h-10 items-center justify-center gap-3 py-1 text-center text-sm font-medium">
-      <p id="announce-text" class="min-w-0" data-items={JSON.stringify(ANNOUNCEMENTS)}>
-        {ANNOUNCEMENTS[0].href
-          ? <a href={ANNOUNCEMENTS[0].href} class="underline underline-offset-4 hover:text-accent">{ANNOUNCEMENTS[0].text}</a>
-          : ANNOUNCEMENTS[0].text}
-      </p>
+  <div id="announce" class="bg-leaf-dark text-white" role="region" aria-label="Offers and announcements">
+    <div class="container-x flex items-center gap-2 text-sm font-medium">
+      <div id="announce-marquee" class="marquee min-w-0 flex-1">
+        <div class="marquee-track">
+          {[false, true].map((dup) => (
+            <ul class="marquee-group" aria-hidden={dup ? "true" : undefined}>
+              {ANNOUNCEMENTS.map((a) => (
+                <li class="marquee-item">
+                  {a.href
+                    ? <a href={a.href} tabindex={dup ? -1 : undefined} class="underline underline-offset-4 hover:text-accent">{a.text}</a>
+                    : <span>{a.text}</span>}
+                </li>
+              ))}
+            </ul>
+          ))}
+        </div>
+      </div>
+      <button id="announce-pause" type="button" class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full hover:bg-white/10" aria-label="Pause scrolling offers" aria-pressed="false">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="5" y="4" width="5" height="16" rx="1" /><rect x="14" y="4" width="5" height="16" rx="1" /></svg>
+      </button>
       <button id="announce-close" type="button" class="-mr-2 hidden h-11 w-11 shrink-0 items-center justify-center rounded-full hover:bg-white/10 sm:inline-flex" aria-label="Dismiss announcement">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg>
       </button>

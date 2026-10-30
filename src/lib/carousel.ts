@@ -28,7 +28,7 @@ export function initCarousel(track: HTMLElement, prev: HTMLButtonElement, next: 
 export function arrowButton(dir: "prev" | "next", label: string): HTMLButtonElement {
   const b = h("button", {
     type: "button",
-    class: "hidden h-11 w-11 items-center justify-center rounded-full border border-line bg-white text-leaf shadow-[var(--shadow-card)] transition hover:bg-tint active:scale-95 disabled:opacity-35 md:inline-flex",
+    class: "hidden h-11 w-11 items-center justify-center rounded-full border border-line bg-surface text-leaf shadow-[var(--shadow-card)] transition hover:bg-tint active:scale-95 disabled:opacity-35 md:inline-flex",
     "aria-label": label,
   });
   b.append(iconEl(dir === "prev" ? "chevronLeft" : "chevronRight", 22));

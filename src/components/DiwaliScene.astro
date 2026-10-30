@@ -1,0 +1,45 @@
+---
+// Decorative Diwali layer: cracker canvas, twinkling string lights, swinging lanterns and flickering diyas.
+// Everything is aria-hidden and pointer-events-none except the canvas parent (tap to burst a cracker).
+interface Props { diyas?: boolean }
+const { diyas = false } = Astro.props;
+const bulbs = Array.from({ length: 24 });
+const colors = ["#ffd24a", "#ff8a1f", "#ff4d79", "#7be0ff", "#9dff7a"];
+const lanterns = [
+  { left: "5%", len: 34, delay: "0s", cls: "" },
+  { left: "20%", len: 62, delay: "-1.2s", cls: "hidden sm:block" },
+  { left: "80%", len: 50, delay: "-0.6s", cls: "hidden sm:block" },
+  { left: "94%", len: 40, delay: "-1.8s", cls: "" },
+];
+---
+<canvas data-diwali-fx class="pointer-events-none absolute inset-0 -z-0 h-full w-full" aria-hidden="true"></canvas>
+<div class="pointer-events-none absolute inset-x-0 top-0 z-[1] h-0" aria-hidden="true">
+  <div class="flex justify-between px-2">
+    {bulbs.map((_, i) => <span class="bulb" style={`--c:${colors[i % colors.length]};--i:${i}`}></span>)}
+  </div>
+  {lanterns.map((l) => (
+    <div class={`lantern absolute top-0 ${l.cls}`} style={`left:${l.left};--len:${l.len}px;--d:${l.delay}`}>
+      <span class="lantern-cord"></span>
+      <svg class="lantern-body" viewBox="0 0 40 56" width="40" height="56" fill="none">
+        <rect x="14" y="0" width="12" height="5" rx="1.5" fill="#f4a100" />
+        <path d="M8 8h24c4 8 4 30 0 38H8C4 38 4 16 8 8Z" fill="#e0452b" />
+        <path d="M14 8c-5 9-5 29 0 38M26 8c5 9 5 29 0 38M20 8v38" stroke="#ffd24a" stroke-opacity=".55" stroke-width="1.4" />
+        <rect x="12" y="46" width="16" height="4" rx="1.5" fill="#f4a100" />
+        <path d="M17 50v6M20 50v6M23 50v6" stroke="#ffd24a" stroke-width="1.6" stroke-linecap="round" />
+        <ellipse cx="20" cy="27" rx="7" ry="11" fill="#ffd24a" opacity=".28" class="lantern-glow" />
+      </svg>
+    </div>
+  ))}
+</div>
+{diyas && (
+  <div class="pointer-events-none absolute inset-x-0 bottom-2 z-[1] flex justify-center gap-6 sm:gap-12" aria-hidden="true">
+    {[0, 1, 2, 3, 4].map((i) => (
+      <svg class={`diya ${i === 1 || i === 3 ? "hidden sm:block" : ""}`} style={`--i:${i}`} viewBox="0 0 48 40" width="48" height="40">
+        <path class="flame" d="M24 2c5 7 7 11 4 16-2 3-6 3-8 0-3-5-1-9 4-16Z" fill="#ffb12b" />
+        <path class="flame" d="M24 9c2.6 3.6 3.4 5.6 1.8 8-1 1.4-2.8 1.4-3.6 0-1.4-2.4-.6-4.4 1.8-8Z" fill="#fff3b0" />
+        <path d="M4 22h40c0 9-8 16-20 16S4 31 4 22Z" fill="#c2561b" />
+        <path d="M4 22h40" stroke="#ffd24a" stroke-width="2" />
+      </svg>
+    ))}
+  </div>
+)}

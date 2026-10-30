@@ -1,5 +1,22 @@
-@import "@fontsource-variable/bricolage-grotesque/wght.css";
 @import "tailwindcss";
+
+/* Heading font, self-hosted from /public/fonts (Bricolage Grotesque, SIL OFL 1.1). No npm package needed. */
+@font-face {
+  font-family: "Bricolage Grotesque Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 200 800;
+  src: url("/fonts/bricolage-latin.woff2") format("woff2-variations");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Bricolage Grotesque Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 200 800;
+  src: url("/fonts/bricolage-latin-ext.woff2") format("woff2-variations");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF, U+20B9;
+}
 
 /* ------------------------------------------------------------------
    Design tokens. Change a value here and the whole storefront follows.
@@ -9,10 +26,13 @@
 @theme {
   --color-cream: #fbfbf8;
   --color-cream-dark: #f0f3ea;
+  --color-surface: #ffffff;
   --color-leaf: #1b5e3b;
+  --color-leaf-btn: #1b5e3b;
   --color-leaf-dark: #0f3d27;
   --color-leaf-soft: #2f7d52;
   --color-ink: #15261c;
+  --color-fg: #15261c;
   --color-muted: #4c5e52;
   --color-line: #e1e6da;
   --color-saffron: #8a5a00;
@@ -33,6 +53,7 @@
 }
 
 html {
+  color-scheme: light;
   font-size: 16px;
   scroll-behavior: smooth;
   scroll-padding-top: 7rem;
@@ -40,7 +61,7 @@ html {
 
 body {
   background: var(--color-cream);
-  color: var(--color-ink);
+  color: var(--color-fg);
   font-family: var(--font-sans);
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
@@ -80,21 +101,21 @@ img { max-width: 100%; }
   .btn {
     @apply inline-flex min-h-11 min-w-11 cursor-pointer select-none items-center justify-center gap-2 rounded-[var(--radius-ctl)] px-4 py-2 text-base font-semibold transition duration-150 active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-55 disabled:active:scale-100;
   }
-  .btn-primary { @apply bg-leaf text-white hover:bg-leaf-dark; }
+  .btn-primary { @apply bg-leaf-btn text-white hover:bg-leaf-soft; }
   .btn-accent { @apply bg-accent text-ink hover:bg-accent-dark; }
   .btn-outline { @apply border-2 border-leaf bg-transparent text-leaf hover:bg-tint; }
-  .btn-light { @apply bg-white text-leaf-dark hover:bg-cream-dark; }
+  .btn-light { @apply bg-white text-leaf-dark hover:bg-tint hover:text-fg; }
   .btn-ghost-light { @apply border-2 border-white/70 text-white hover:bg-white/10; }
   .btn-whatsapp { @apply bg-[#127a3e] text-white hover:bg-[#0d5f2f]; }
   .btn-lg { @apply min-h-12 px-6 text-lg; }
 
-  .card { @apply rounded-[var(--radius-card)] border border-line bg-white shadow-[var(--shadow-card)]; }
-  .nav-link { @apply inline-flex min-h-11 items-center rounded-[var(--radius-ctl)] px-3 text-[0.95rem] font-semibold text-ink hover:bg-cream-dark hover:text-leaf; }
+  .card { @apply rounded-[var(--radius-card)] border border-line bg-surface shadow-[var(--shadow-card)]; }
+  .nav-link { @apply inline-flex min-h-11 items-center rounded-[var(--radius-ctl)] px-3 text-[0.95rem] font-semibold text-fg hover:bg-cream-dark hover:text-leaf; }
   .nav-link[aria-current="page"] { @apply bg-tint text-leaf; }
-  .input { @apply min-h-11 w-full rounded-[var(--radius-ctl)] border-2 border-line bg-white px-3 py-2 text-base text-ink transition-colors hover:border-leaf-soft/60 focus:border-leaf; }
+  .input { @apply min-h-11 w-full rounded-[var(--radius-ctl)] border-2 border-line bg-surface px-3 py-2 text-base text-fg transition-colors hover:border-leaf-soft/60 focus:border-leaf; }
   .input[aria-invalid="true"] { @apply border-red-700; }
-  .chip { @apply inline-flex min-h-11 shrink-0 cursor-pointer items-center gap-1 rounded-full border-2 border-line bg-white px-4 text-base font-semibold text-ink transition-colors hover:border-leaf hover:text-leaf; }
-  .chip[aria-pressed="true"] { @apply border-leaf bg-leaf text-white hover:text-white; }
+  .chip { @apply inline-flex min-h-11 shrink-0 cursor-pointer items-center gap-1 rounded-full border-2 border-line bg-surface px-4 text-base font-semibold text-fg transition-colors hover:border-leaf hover:text-leaf; }
+  .chip[aria-pressed="true"] { @apply border-leaf bg-leaf-btn text-white hover:text-white; }
   .badge { @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-bold; }
   .skeleton { @apply animate-pulse rounded-[var(--radius-card)] bg-cream-dark; }
   .field-error { @apply mt-1 text-sm font-semibold text-red-800; }
@@ -161,8 +182,72 @@ dialog.qv::backdrop { background: rgb(15 61 39 / 0.55); backdrop-filter: blur(2p
     z-index: 60;
     max-height: 88dvh;
     border-radius: 1.5rem 1.5rem 0 0;
-    background: #fff;
+    background: var(--color-surface);
     box-shadow: var(--shadow-pop);
   }
-  #filters-overlay[data-open="true"] { display: block; position: fixed; inset: 0; z-index: 55; background: rgb(15 61 39 / 0.5); }
+  #filters-overlay[data-open="true"] { display: block; position: fixed; inset: 0; z-index: 55; background: rgb(15 61 39 / 0.55); }
+}
+
+/* ---------- Diwali theme ---------- */
+.diwali-sky {
+  background:
+    radial-gradient(ellipse at 50% 120%, rgb(255 138 31 / 0.35), transparent 60%),
+    radial-gradient(circle at 15% 10%, rgb(197 139 255 / 0.18), transparent 40%),
+    linear-gradient(180deg, #1c0b3a 0%, #3a0f4f 55%, #5a1450 100%);
+  color: #fff;
+}
+.diwali-sky .stars {
+  position: absolute; inset: 0; opacity: 0.7;
+  background-image:
+    radial-gradient(1.5px 1.5px at 12% 30%, #fff, transparent),
+    radial-gradient(1px 1px at 30% 70%, #ffe8a8, transparent),
+    radial-gradient(1.5px 1.5px at 55% 20%, #fff, transparent),
+    radial-gradient(1px 1px at 72% 55%, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 88% 28%, #ffe8a8, transparent),
+    radial-gradient(1px 1px at 45% 85%, #fff, transparent);
+  animation: twinkle 3.2s ease-in-out infinite alternate;
+}
+.diwali-title {
+  background: linear-gradient(90deg, #ffd24a, #ff8a1f, #ff4d79, #ffd24a);
+  background-size: 250% 100%;
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  animation: shimmer 6s linear infinite;
+  text-shadow: 0 0 30px rgb(255 138 31 / 0.35);
+}
+.bulb {
+  width: 9px; height: 9px; border-radius: 9999px; background: var(--c);
+  margin-top: 4px;
+  box-shadow: 0 0 10px 3px var(--c);
+  animation: twinkle 1.6s ease-in-out infinite alternate;
+  animation-delay: calc(var(--i) * -0.23s);
+}
+.lantern { transform-origin: 50% 0; animation: swing 3.6s ease-in-out infinite alternate; animation-delay: var(--d, 0s); }
+.lantern-cord { display: block; width: 1.5px; height: var(--len, 40px); margin: 0 auto; background: rgb(255 210 74 / 0.7); }
+.lantern-body { display: block; margin-left: -19px; filter: drop-shadow(0 0 10px rgb(255 138 31 / 0.6)); }
+.lantern-glow { animation: twinkle 2.2s ease-in-out infinite alternate; }
+.flame { transform-origin: 50% 90%; animation: flicker 0.9s ease-in-out infinite alternate; animation-delay: calc(var(--i, 0) * -0.17s); }
+.diya { filter: drop-shadow(0 0 12px rgb(255 177 43 / 0.7)); }
+.diya-glow { animation: twinkle 2s ease-in-out infinite alternate; }
+
+@keyframes twinkle { from { opacity: 0.35; } to { opacity: 1; } }
+@keyframes swing { from { transform: rotate(-7deg); } to { transform: rotate(7deg); } }
+@keyframes flicker {
+  0% { transform: scale(1, 1) rotate(-2deg); }
+  50% { transform: scale(0.94, 1.08) rotate(2deg); }
+  100% { transform: scale(1.04, 0.96) rotate(-1deg); }
+}
+@keyframes shimmer { to { background-position: 250% 0; } }
+
+/* ---------- Scrolling announcement bar ---------- */
+.marquee { overflow: hidden; mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent); }
+.marquee-track { display: flex; width: max-content; animation: marquee 38s linear infinite; }
+.marquee:hover .marquee-track, .marquee:focus-within .marquee-track, .marquee[data-paused="true"] .marquee-track { animation-play-state: paused; }
+.marquee-group { display: flex; flex-shrink: 0; align-items: center; }
+.marquee-item { display: inline-flex; min-height: 2.5rem; align-items: center; gap: 0.75rem; padding-right: 3rem; white-space: nowrap; }
+.marquee-item::before { content: "✦"; color: var(--color-accent); }
+@keyframes marquee { to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) {
+  .marquee { overflow-x: auto; mask-image: none; }
+  .marquee-track { animation: none; }
+  .marquee-group[aria-hidden="true"] { display: none; }
 }

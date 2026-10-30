@@ -1,7 +1,7 @@
 import { FSSAI_NUMBER, MAX_QTY, SITE_URL, STORE_NAME, WHATSAPP_NUMBER } from "../config";
 import * as cart from "../lib/cart";
 import * as compare from "../lib/compare";
-import { formatUnitPrice } from "../lib/pricing";
+import { formatUnitPrice, offerInfo } from "../lib/pricing";
 import { videoPlayer } from "../lib/video";
 import { $, h } from "../lib/dom";
 import { getProduct, getProducts, loadMenu } from "../lib/store";
@@ -206,10 +206,11 @@ function render(p: Product): void {
     h("p", {}, h("a", { href: `/shop?category=${encodeURIComponent(p.category)}`, class: "font-semibold text-leaf underline-offset-2 hover:underline" }, p.category)),
     h("h1", { class: "text-3xl font-bold md:text-4xl" }, p.name),
     h("p", { class: "flex flex-wrap items-baseline gap-x-3 text-3xl font-bold" }, formatMoney(p.price),
+      ...(offerInfo(p) ? [h("s", { class: "text-xl font-medium text-muted" }, formatMoney(p.mrp)), h("span", { class: "badge bg-berry px-3 py-1 text-sm text-white" }, `Save ${formatMoney(p.mrp - p.price)}`)] : []),
       p.weight ? h("span", { class: "text-lg font-medium text-muted" }, `Pack size ${p.weight}`) : h("span")),
     unit ? h("p", { class: "text-sm text-muted" }, unit) : h("span"),
     h("p", {
-      class: p.inStock ? "badge bg-tint px-3 py-1 text-sm text-leaf" : "badge bg-ink px-3 py-1 text-sm text-white",
+      class: p.inStock ? "badge bg-tint px-3 py-1 text-sm text-leaf" : "badge bg-fg px-3 py-1 text-sm text-ink",
     }, p.inStock ? "In stock" : "Sold out"),
     p.shortDescription ? h("p", { class: "max-w-prose text-lg" }, p.shortDescription) : h("span"),
     quantityAndAdd(p),

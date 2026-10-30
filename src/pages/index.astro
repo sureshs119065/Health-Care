@@ -3,11 +3,12 @@ import Shop from "../layouts/Shop.astro";
 import Contact from "../components/Contact.astro";
 import Icon from "../components/Icon.astro";
 import PromoBanner from "../components/PromoBanner.astro";
+import DiwaliScene from "../components/DiwaliScene.astro";
 import { artSvg } from "../lib/art";
 import type { IconName } from "../lib/icons";
 import {
   ABOUT_STORY, BUNDLES, CAMPAIGNS, FSSAI_NUMBER, HERO_IMAGE, HYGIENE_NOTE, NEEDS, OFFERS, PACKAGING_NOTE,
-  SELLER_NAME, SITE_URL, STORE_NAME, TRUST_POINTS, WHATSAPP_NUMBER, BESTSELLER_TAG,
+  SELLER_NAME, DIWALI, SITE_URL, STORE_NAME, TRUST_POINTS, WHATSAPP_NUMBER, BESTSELLER_TAG,
 } from "../config";
 import { wording } from "../lib/copy";
 
@@ -68,10 +69,10 @@ void BESTSELLER_TAG;
   </section>
 
   <!-- Ordering facts strip -->
-  <section class="container-x -mt-6 md:-mt-8" aria-label="How shopping here works">
+  <section class="container-x relative z-10 -mt-6 md:-mt-8" aria-label="How shopping here works">
     <ul class="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-line bg-line shadow-[var(--shadow-card)] lg:grid-cols-4">
       {strip.map(([icon, t, d]) => (
-        <li class="flex items-start gap-3 bg-white p-4">
+        <li class="flex items-start gap-3 bg-surface p-4">
           <span class="mt-0.5 text-leaf"><Icon name={icon} size={26} /></span>
           <span><span class="block font-bold leading-snug">{t}</span><span class="text-sm text-muted">{d}</span></span>
         </li>
@@ -79,9 +80,31 @@ void BESTSELLER_TAG;
     </ul>
   </section>
 
+  <!-- Diwali special -->
+  {DIWALI.enabled && (
+    <section id="diwali" class="diwali-sky relative isolate mt-8 overflow-hidden scroll-mt-32" aria-labelledby="diwali-title">
+      <div class="stars" aria-hidden="true"></div>
+      <DiwaliScene diyas />
+      <div class="container-x relative z-[2] pb-20 pt-24 md:pb-24 md:pt-28">
+        <div class="mx-auto max-w-3xl text-center">
+          <p class="badge bg-accent text-ink">Diwali special</p>
+          <h2 id="diwali-title" class="diwali-title mt-3 text-4xl font-extrabold md:text-6xl">{DIWALI.title}</h2>
+          <p class="mx-auto mt-3 max-w-xl text-lg text-white/90">{DIWALI.text}</p>
+        </div>
+        <div id="diwali-offer" class="mx-auto mt-8 max-w-4xl" aria-live="polite">
+          <div class="skeleton h-72 bg-white/10" aria-hidden="true"></div>
+        </div>
+        <div class="mt-6 flex flex-wrap justify-center gap-3">
+          <a href="/offers" class="btn btn-ghost-light btn-lg">All Diwali offers</a>
+          <button type="button" data-light-cracker class="btn btn-accent btn-lg">Light a cracker</button>
+        </div>
+      </div>
+    </section>
+  )}
+
   <div class="container-x">
     <p id="notice" class="mt-6 hidden rounded-xl border-2 border-saffron bg-amber-50 p-3 font-semibold" role="status"></p>
-    <div id="home-error" class="mt-6 hidden rounded-2xl border-2 border-red-800 bg-white p-6 text-center" role="alert">
+    <div id="home-error" class="mt-6 hidden rounded-2xl border-2 border-red-800 bg-surface p-6 text-center" role="alert">
       <p class="text-lg font-semibold">We could not load the products.</p>
       <p class="mt-1">Check your internet connection and try again.</p>
       <button id="retry" type="button" class="btn btn-primary mt-4">Retry</button>

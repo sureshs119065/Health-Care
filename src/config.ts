@@ -49,16 +49,34 @@ export const HYGIENE_NOTE = "";
 
 // Slim bar above the header. Rotates if you add more than one message.
 // Add `href` to make a message a link. Do not add discounts or delivery promises unless they are real.
+// On wide screens and phones the bar scrolls sideways on its own (hover or tap the pause button to stop it).
 export const ANNOUNCEMENTS: { text: string; href?: string }[] = [
+  { text: "Diwali offers are live: Diwali Special Snack Hamper at ₹499 instead of ₹610", href: "/offers" },
+  { text: "More offers: see every product sorted by the best price per 100 g", href: "/shop?sort=unit-asc" },
+  { text: "Pack sets: breakfast, soup night and snack boxes, added to your cart in one tap", href: "/offers#sets" },
   { text: "Order on WhatsApp. You pay by UPI only after we confirm your total.", href: "/how-to-order" },
 ];
 
+// Diwali special (home page section + the Offers page). Set enabled to false to hide it everywhere.
+// productId must match the Diwali hamper row in your Google Sheet / docs/sample-products.csv.
+// The prices live in the sheet: price = offer price, mrp = the price before the offer.
+export const DIWALI = {
+  enabled: true,
+  productId: "P013",
+  title: "Happy Diwali",
+  text: "A gift hamper of four of our best-loved snacks, packed for sharing with family and friends.",
+  // Optional, shown under the offer. Example: "Offer valid till 8 Nov". Leave empty to hide it. Keep it true.
+  validity: "",
+};
+
 // Real offers only (a discount you really run). Leave empty until you have one.
 // Example: { title: "Festival week", text: "10% off Sweets until 20 Nov", href: "/shop?category=Sweets", cta: "Shop sweets" }
-export const OFFERS: { title: string; text: string; href: string; cta: string }[] = [];
+export const OFFERS: { title: string; text: string; href: string; cta: string }[] = [
+  { title: "Diwali Special Snack Hamper", text: "Four snack packs in one gift hamper at a special Diwali price.", href: "/offers", cta: "See the Diwali offer" },
+];
 
 // Hero picture. Use a path under /public (for example "/images/hero.jpg"). Empty = illustrated pack tiles.
-export const HERO_IMAGE = "";
+export const HERO_IMAGE = "/images/hero.png";
 
 // Product tag that marks your "Bestsellers" in the Google Sheet tags column.
 // The site has no sales data, so these are the items YOU mark with this tag.
@@ -95,8 +113,38 @@ export const DELIVERY_POLICY: string[] = [];
 
 // Homepage campaign banners (reusable component). Each one links to a collection, not to a made-up sale.
 // `art` picks the illustration (a product category name). `tone`: leaf | marigold | mist | berry.
+// To show your own photo instead of the illustration, add  image: "/images/banners/your-photo.jpg"  to that banner
+// (file goes in public/images/banners/). See docs/ADDING-PRODUCT-IMAGES.md.
 export const CAMPAIGNS: { title: string; text: string; cta: string; href: string; tone: "leaf" | "marigold" | "mist" | "berry"; art: string; image?: string }[] = [
-  { title: "Breakfast, ready in minutes", text: "Muesli, dosa mix and chilla mix. Pick one and your morning is sorted.", cta: "Shop breakfast", href: "/shop?category=Breakfast", tone: "marigold", art: "Breakfast" },
-  { title: "Best price per 100 g", text: "Every product sorted by what you actually pay.", cta: "Compare prices", href: "/shop?sort=unit-asc", tone: "mist", art: "Flours" },
-  { title: "Snacks for your bag", text: "Roasted, wholesome and easy to carry.", cta: "Shop snacks", href: "/shop?category=Snacks", tone: "leaf", art: "Snacks" },
+ {
+    title: "Breakfast, ready in minutes",
+    text: "Muesli, dosa mix and chilla mix. Pick one and your morning is sorted.",
+    cta: "Shop breakfast",
+    href: "/shop?category=Breakfast",
+    tone: "marigold",
+    art: "Breakfast",
+    image: "/images/banners/breakfast-banner.png"
+  },
+ {
+  title: "Best price per 100 g",
+  text: "Every product sorted by what you actually pay.",
+  cta: "Compare prices",
+  href: "/shop?sort=unit-asc",
+  tone: "mist",
+  art: "Flours",
+  image: "/images/banners/best-price-banner.png"
+},
+  { title: "Snacks for your bag", text: "Roasted, wholesome and easy to carry.", cta: "Shop snacks", href: "/shop?category=Snacks", tone: "leaf", art: "Snacks", image: "/images/banners/snacks-banner.png" },
 ];
+
+// Pictures for the "Shop by category" tiles on the home page.
+// Left side = category name exactly as written in your sheet. Right side = image path (file inside /public) or https link.
+// Example: "Snacks": "/images/categories/snacks.jpg"
+// A category not listed here uses the photo of its first product, or an illustration if no photo exists yet.
+export const CATEGORY_IMAGES: Record<string, string> = {
+   "Snacks": "/images/categories/snacks.png",
+  "Breakfast": "/images/categories/Breakfast.png",
+  "Flours": "/images/categories/flours.png",
+  "Soup Mixes": "/images/categories/soup-mixes.png",
+  "Sweets": "/images/categories/sweets.png",
+};

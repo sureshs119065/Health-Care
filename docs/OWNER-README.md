@@ -70,3 +70,10 @@ Use WebP or JPG, about 800 x 800 pixels, under 150 KB each.
 ## If something looks wrong
 - A yellow message "Showing saved menu" means the sheet could not be read. Check the published link and that the Products tab is published.
 - An item is missing: check its row has an id, a name and a numeric price.
+
+## Diwali offer (added)
+
+- The offer product is row P013 in the sheet (docs/sample-products.csv). Add a new column named `mrp` to your Google Sheet: `mrp` = price before the offer, `price` = the offer price. Add the P013 row to the sheet too.
+- The price (₹499, was ₹610) is a placeholder. Change it to your real offer price before launch.
+- Add a hamper photo at /images/products/diwali-snack-hamper.png and put that path in the image column.
+- src/config.ts: `DIWALI` controls the home page section and the Offers page (set `enabled: false` to hide). `ANNOUNCEMENTS` controls the scrolling top bar. Add `validity` text only if it is true.

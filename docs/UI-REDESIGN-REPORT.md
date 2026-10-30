@@ -7,8 +7,8 @@ No payment gateway and no new backend were added.
 ## What changed
 - **Design system** (`src/styles/global.css`): tokens for colour, type, radius, shadow; buttons, cards, chips, badges.
   Palette: white pages, deep leaf green (trust), marigold (the buy action), berry (real offers only).
-  Headings use Bricolage Grotesque (self-hosted via `@fontsource-variable/bricolage-grotesque`, the only new dependency).
-- **Header**: announcement bar (`ANNOUNCEMENTS`), wide search with thumbnails, prices, category results and an empty state,
+  White pages with a solid black footer. Headings use Bricolage Grotesque, self-hosted from `public/fonts` (no npm package, no new dependency).
+- **Header** (two rows): row 1 is the logo and navigation, row 2 is the search bar with Help, WhatsApp and Cart. Includes an announcement bar (`ANNOUNCEMENTS`), wide search with thumbnails, prices, category results and an empty state,
   WhatsApp button, cart with live count badge, Categories mega menu, full navigation, compact mobile header with menu, search and cart.
 - **Home** (12 sections): hero, ordering facts, category tiles, campaign banners (`PromoBanner.astro`), bestsellers carousel,
   shop by need, video reels, trust, how-to-use cards, ready-made sets, brand story, ordering steps, contact, footer.
@@ -34,3 +34,5 @@ No made-up discounts, timers, scarcity, reviews, testimonials, certifications or
 Product photos (sheet `image` column), recipe video ids (`videoId`), real WhatsApp number, FSSAI number, site URL, seller story, hygiene and packaging notes,
 delivery and returns wording, social links, storage instructions (the sheet has no storage column yet).
 Read the privacy and terms pages once before launch.
+
+Product photos: see `docs/ADDING-PRODUCT-IMAGES.md`.

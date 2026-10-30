@@ -5,7 +5,7 @@
   "category": "Soup Mixes",
   "price": "180",
   "weight": "200 g",
-  "image": "",
+  "image": "/images/products/millet-soup-mix.png",
   "shortDescription": "Quick-cook soup mix with ragi, foxtail millet and lentils.",
   "ingredients": "Ragi, foxtail millet, moong dal, dried vegetables, rock salt, spices",
   "calories": "310",
@@ -17,7 +17,8 @@
   "inStock": "TRUE",
   "videoId": "",
   "tags": "low sugar, soup, featured",
-  "howToUse": "Mix the soup mix into hot water, stir and cook until thick. Follow the pack instructions."
+  "howToUse": "Mix the soup mix into hot water, stir and cook until thick. Follow the pack instructions.",
+  "mrp": ""
  },
  {
   "id": "P002",
@@ -25,7 +26,7 @@
   "category": "Soup Mixes",
   "price": "160",
   "weight": "150 g",
-  "image": "",
+  "image": "/images/products/tomato-vegetable-soup-mix.png",
   "shortDescription": "Light tomato soup mix with dried vegetables and herbs.",
   "ingredients": "Tomato powder, carrot, beans, onion, garlic, black pepper, rock salt",
   "calories": "290",
@@ -36,8 +37,9 @@
   "fssai": "",
   "inStock": "TRUE",
   "videoId": "",
-  "tags": "low sugar, soup",
-  "howToUse": "Stir into hot water and simmer for a few minutes. Follow the pack instructions."
+  "tags": "low sugar, soup, featured",
+  "howToUse": "Stir into hot water and simmer for a few minutes. Follow the pack instructions.",
+  "mrp": ""
  },
  {
   "id": "P003",
@@ -45,7 +47,7 @@
   "category": "Breakfast",
   "price": "260",
   "weight": "350 g",
-  "image": "",
+  "image": "/images/products/Rustic Berry and Nut Muesli Bowl.png",
   "shortDescription": "No added sugar muesli with oats, almonds and pumpkin seeds.",
   "ingredients": "Rolled oats, almonds, pumpkin seeds, flax seeds, cinnamon",
   "calories": "390",
@@ -57,7 +59,8 @@
   "inStock": "TRUE",
   "videoId": "",
   "tags": "low sugar, breakfast, featured",
-  "howToUse": "Serve with milk or curd. Add fresh fruit if you like."
+  "howToUse": "Serve with milk or curd. Add fresh fruit if you like.",
+  "mrp": ""
  },
  {
   "id": "P004",
@@ -65,7 +68,7 @@
   "category": "Breakfast",
   "price": "170",
   "weight": "500 g",
-  "image": "",
+  "image": "/images/products/jowar-dosa-mix.png",
   "shortDescription": "Ready dosa mix made with jowar and urad dal.",
   "ingredients": "Jowar flour, urad dal, rice flour, fenugreek, salt",
   "calories": "350",
@@ -77,7 +80,8 @@
   "inStock": "TRUE",
   "videoId": "",
   "tags": "breakfast, millet",
-  "howToUse": "Mix with water to a pouring batter, rest as per the pack, then cook on a hot pan."
+  "howToUse": "Mix with water to a pouring batter, rest as per the pack, then cook on a hot pan.",
+  "mrp": ""
  },
  {
   "id": "P005",
@@ -85,7 +89,7 @@
   "category": "Breakfast",
   "price": "150",
   "weight": "400 g",
-  "image": "",
+  "image": "/images/products/besan-chilla-mix.png",
   "shortDescription": "Savoury chilla mix with besan, spices and dried herbs.",
   "ingredients": "Besan, rice flour, cumin, turmeric, ajwain, coriander leaves, salt",
   "calories": "360",
@@ -97,7 +101,8 @@
   "inStock": "TRUE",
   "videoId": "",
   "tags": "breakfast, savoury",
-  "howToUse": "Mix with water to a smooth batter and cook on a lightly oiled pan."
+  "howToUse": "Mix with water to a smooth batter and cook on a lightly oiled pan.",
+  "mrp": ""
  },
  {
   "id": "P006",
@@ -105,7 +110,7 @@
   "category": "Snacks",
   "price": "150",
   "weight": "150 g",
-  "image": "",
+  "image": "/images/products/ragi-cookies.png",
   "shortDescription": "Crisp ragi cookies lightly sweetened with dates.",
   "ingredients": "Ragi flour, whole wheat flour, dates, ghee, cardamom",
   "calories": "430",
@@ -117,7 +122,8 @@
   "inStock": "TRUE",
   "videoId": "",
   "tags": "snack, wholesome, featured",
-  "howToUse": "Ready to eat. Store in an airtight box."
+  "howToUse": "Ready to eat. Store in an airtight box.",
+  "mrp": ""
  },
  {
   "id": "P007",
@@ -125,19 +131,20 @@
   "category": "Snacks",
   "price": "140",
   "weight": "100 g",
-  "image": "",
+  "image": "/images/products/roasted-Chana-Masala.png",
   "shortDescription": "Light, crunchy fox nuts roasted with black pepper.",
   "ingredients": "Makhana, olive oil, black pepper, rock salt",
   "calories": "350",
   "protein": "10",
-  "carbs": "68",
-  "fibre": "8",
-  "fat": "3",
+  "carbs": "20",
+  "fibre": "5",
+  "fat": "15",
   "fssai": "",
-  "inStock": "FALSE",
+  "inStock": "TRUE",
   "videoId": "",
-  "tags": "snack, low sugar",
-  "howToUse": "Ready to eat. Keep the pack closed after opening."
+  "tags": "snack, protein",
+  "howToUse": "Ready to eat. Store in an airtight box.",
+  "mrp": ""
  },
  {
   "id": "P008",
@@ -145,7 +152,7 @@
   "category": "Snacks",
   "price": "90",
   "weight": "150 g",
-  "image": "",
+  "image": "/images/products/Roasted-Chana-Masala.png",
   "shortDescription": "Crunchy roasted chickpeas with a mild masala.",
   "ingredients": "Roasted chana, spices, rock salt",
   "calories": "370",
@@ -157,27 +164,29 @@
   "inStock": "TRUE",
   "videoId": "",
   "tags": "snack, protein, featured",
-  "howToUse": "Ready to eat. Good for carrying to work or night shifts."
+  "howToUse": "Ready to eat. Good for carrying to work or night shifts.",
+  "mrp": ""
  },
  {
   "id": "P009",
-  "name": "Date and Nut Laddu",
-  "category": "Sweets",
-  "price": "220",
-  "weight": "250 g",
-  "image": "",
-  "shortDescription": "Soft laddu made with dates and nuts, no refined sugar.",
-  "ingredients": "Dates, almonds, walnuts, sesame, ghee",
-  "calories": "420",
-  "protein": "8",
-  "carbs": "55",
-  "fibre": "7",
-  "fat": "19",
+  "name": "Roasted Chana",
+  "category": "Snacks",
+  "price": "80",
+  "weight": "150 g",
+  "image": "/images/products/salted-roasted-chana.png",
+  "shortDescription": "Crunchy roasted chickpeas with a pinch of salt.",
+  "ingredients": "Roasted chana, rock salt",
+  "calories": "370",
+  "protein": "20",
+  "carbs": "60",
+  "fibre": "8",
+  "fat": "4",
   "fssai": "",
   "inStock": "TRUE",
   "videoId": "",
-  "tags": "sweet, no refined sugar, featured",
-  "howToUse": "Ready to eat. Keep in a cool, dry place."
+  "tags": "snack, wholesome",
+  "howToUse": "Ready to eat. Store in an airtight box.",
+  "mrp": ""
  },
  {
   "id": "P010",
@@ -185,7 +194,7 @@
   "category": "Flours",
   "price": "210",
   "weight": "1 kg",
-  "image": "",
+  "image": "/images/products/multigrain-atta.png",
   "shortDescription": "Stone-ground blend of wheat, jowar, ragi and chana.",
   "ingredients": "Whole wheat, jowar, ragi, bengal gram",
   "calories": "340",
@@ -197,7 +206,8 @@
   "inStock": "TRUE",
   "videoId": "",
   "tags": "flour, wholesome, featured",
-  "howToUse": "Use like regular atta for rotis and parathas."
+  "howToUse": "Use like regular atta for rotis and parathas.",
+  "mrp": ""
  },
  {
   "id": "P011",
@@ -205,7 +215,7 @@
   "category": "Flours",
   "price": "120",
   "weight": "500 g",
-  "image": "",
+  "image": "/images/products/ragi-flour.png",
   "shortDescription": "Fine stone-ground ragi flour for rotis, porridge and dosa.",
   "ingredients": "Ragi (finger millet)",
   "calories": "330",
@@ -217,7 +227,8 @@
   "inStock": "TRUE",
   "videoId": "",
   "tags": "flour, millet",
-  "howToUse": "Use for rotis, dosa or porridge. Follow the pack instructions."
+  "howToUse": "Use for rotis, dosa or porridge. Follow the pack instructions.",
+  "mrp": ""
  },
  {
   "id": "P012",
@@ -225,7 +236,7 @@
   "category": "Snacks",
   "price": "230",
   "weight": "200 g",
-  "image": "",
+  "image": "/images/products/mixed-seeds-lightly-roasted.png",
   "shortDescription": "Pumpkin, sunflower and flax seeds, dry roasted with a pinch of salt.",
   "ingredients": "Pumpkin seeds, sunflower seeds, flax seeds, rock salt",
   "calories": "540",
@@ -237,6 +248,28 @@
   "inStock": "TRUE",
   "videoId": "",
   "tags": "snack, seeds",
-  "howToUse": "Ready to eat. Sprinkle on salads or curd, or eat as a snack."
+  "howToUse": "Ready to eat. Sprinkle on salads or curd, or eat as a snack.",
+  "mrp": ""
+ },
+ {
+  "id": "P013",
+  "name": "Diwali Special Snack Hamper",
+  "category": "Gift Hampers",
+  "price": "499",
+  "weight": "600 g",
+  "image": "/images/products/diwali-special-snack-hamper.png",
+  "shortDescription": "Gift hamper of four snack packs: Ragi Cookies, Roasted Makhana (Pepper), Mixed Seeds and Roasted Chana Masala.",
+  "ingredients": "Ragi Cookies: ragi flour, whole wheat flour, dates, ghee, cardamom. Roasted Makhana: makhana, olive oil, black pepper, rock salt. Mixed Seeds: pumpkin seeds, sunflower seeds, flax seeds, rock salt. Roasted Chana Masala: roasted chana, spices, rock salt.",
+  "calories": "",
+  "protein": "",
+  "carbs": "",
+  "fibre": "",
+  "fat": "",
+  "fssai": "",
+  "inStock": "TRUE",
+  "videoId": "",
+  "tags": "diwali, gift, snack",
+  "howToUse": "Ready to eat. Share with family or gift it. Store each pack airtight after opening.",
+  "mrp": "610"
  }
 ]

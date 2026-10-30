@@ -15,7 +15,7 @@ const cols: { title: string; links: [string, string][] }[] = [
 const year = new Date().getFullYear();
 void BESTSELLER_TAG;
 ---
-<footer class="mt-8 bg-leaf-dark text-white" data-footer>
+<footer class="mt-8 bg-black text-white" data-footer>
   <div class="container-x grid gap-x-10 gap-y-2 py-10 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
     <div class="space-y-3 md:col-span-2 lg:col-span-1">
       <p class="flex items-center gap-2 font-display text-2xl font-bold">
@@ -34,7 +34,7 @@ void BESTSELLER_TAG;
     </div>
 
     {cols.map((c) => (
-      <details class="group border-b border-white/15 md:border-0" data-col>
+      <details class="group border-b border-white/20 md:border-0" data-col>
         <summary class="flex min-h-12 cursor-pointer list-none items-center justify-between font-display text-lg font-bold md:pointer-events-none md:min-h-0 md:pb-2 [&::-webkit-details-marker]:hidden">
           {c.title}
           <svg class="transition-transform group-open:rotate-180 md:hidden" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
@@ -48,11 +48,11 @@ void BESTSELLER_TAG;
     ))}
   </div>
 
-  <div class="border-t border-white/15">
-    <div class="container-x space-y-1 py-5 pb-28 text-sm text-white/80 md:pb-5">
+  <div class="border-t border-white/20">
+    <div class="container-x space-y-1 py-6 pb-28 text-center text-sm text-white/90 md:pb-6">
       <p>© {year} {BUSINESS_NAME || STORE_NAME}. All rights reserved.</p>
       {BUSINESS_ADDRESS && <p>{BUSINESS_ADDRESS}</p>}
-      <p>FSSAI Lic. No. {FSSAI_NUMBER}</p>
+      <p>FSSAI Licence No. {FSSAI_NUMBER}</p>
       <p>Our foods are not a substitute for medical advice. Consult your doctor or dietitian.</p>
       <p>Menu updated: <span id="updated">loading…</span></p>
     </div>

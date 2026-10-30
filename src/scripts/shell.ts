@@ -18,9 +18,8 @@ function renderShell(): void {
   const lines = getLines();
   const total = formatMoney(grandTotal(lines));
 
-  for (const id of ["header-count", "bar-count"]) {
-    const el = byId(id);
-    if (el && el.textContent !== String(count)) {
+  for (const el of Array.from(document.querySelectorAll<HTMLElement>("[data-cart-count], #bar-count"))) {
+    if (el.textContent !== String(count)) {
       el.textContent = String(count);
       el.classList.remove("bump");
       void el.offsetWidth;
@@ -114,12 +113,14 @@ if (drawer) {
   });
 
   byId("bar-btn")?.addEventListener("click", openDrawer);
-  byId("header-cart")?.addEventListener("click", (e) => {
-    if (window.matchMedia("(max-width: 767px)").matches) {
-      e.preventDefault();
-      openDrawer();
-    }
-  });
+  document.querySelectorAll<HTMLElement>("[data-cart-link]").forEach((link) =>
+    link.addEventListener("click", (e) => {
+      if (window.matchMedia("(max-width: 767px)").matches) {
+        e.preventDefault();
+        openDrawer();
+      }
+    }),
+  );
   $("#close").addEventListener("click", closeDrawer);
   $("#overlay").addEventListener("click", closeDrawer);
   $("#to-checkout").addEventListener("click", () => {

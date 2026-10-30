@@ -1,34 +1,56 @@
 ---
 import Shop from "../layouts/Shop.astro";
 import PromoBanner from "../components/PromoBanner.astro";
-import { BUNDLES, OFFERS, STORE_NAME } from "../config";
+import DiwaliScene from "../components/DiwaliScene.astro";
+import { BUNDLES, DIWALI, OFFERS, STORE_NAME } from "../config";
+// The Diwali hamper is shown in its own block, so it is not repeated in the "other offers" list.
+const otherOffers = OFFERS.filter((o) => o.href !== "/offers");
 ---
-<Shop title={`Offers and sets | ${STORE_NAME}`} description="Current offers, ready-made sets and the best price per 100 g.">
-  <div class="container-x py-8 md:py-12">
-    <nav aria-label="Breadcrumb" class="text-sm text-muted"><a href="/" class="underline-offset-2 hover:underline">Home</a> <span aria-hidden="true">/</span> <span aria-current="page">Offers</span></nav>
-    <h1 class="mt-3 text-3xl font-bold md:text-4xl">Offers</h1>
-    <p class="section-sub">Only offers we are really running appear here.</p>
-
-    <p id="notice" class="mt-4 hidden rounded-xl border-2 border-saffron bg-amber-50 p-3 font-semibold" role="status"></p>
-
-    {OFFERS.length > 0 ? (
-      <ul class="mt-6 grid gap-4 md:grid-cols-2">
-        {OFFERS.map((o) => <li><PromoBanner title={o.title} text={o.text} cta={o.cta} href={o.href} tone="berry" badge="Offer" size="lg" /></li>)}
-      </ul>
-    ) : (
-      <div class="mt-6 rounded-2xl bg-tint p-6 md:p-8">
-        <h2 class="text-xl font-bold">No special offer running right now</h2>
-        <p class="mt-2 max-w-prose">We would rather show you true prices than invent a sale. Two ways to spend less today:</p>
-        <div class="mt-4 flex flex-wrap gap-3">
-          <a href="/shop?sort=unit-asc" class="btn btn-primary">See lowest price per 100 g</a>
-          <a href="#sets" class="btn btn-outline">View ready-made sets</a>
+<Shop title={`Diwali offers and sets | ${STORE_NAME}`} description="Diwali special offer, ready-made pack sets and the best price per 100 g.">
+  {DIWALI.enabled && (
+    <section id="diwali" class="diwali-sky relative isolate overflow-hidden" aria-labelledby="offers-title">
+      <div class="stars" aria-hidden="true"></div>
+      <DiwaliScene diyas />
+      <div class="container-x relative z-[2] pb-24 pt-24 md:pb-28 md:pt-32">
+        <nav aria-label="Breadcrumb" class="text-sm text-white/80"><a href="/" class="underline-offset-2 hover:underline">Home</a> <span aria-hidden="true">/</span> <span aria-current="page">Offers</span></nav>
+        <div class="mx-auto mt-4 max-w-3xl text-center">
+          <p class="badge bg-accent text-ink">Diwali special</p>
+          <h1 id="offers-title" class="diwali-title mt-3 text-5xl font-extrabold md:text-7xl">{DIWALI.title}</h1>
+          <p class="mx-auto mt-3 max-w-xl text-lg text-white/90">{DIWALI.text}</p>
+          <button type="button" data-light-cracker class="btn btn-accent btn-lg mt-5">Light a cracker</button>
+          <p class="mt-2 text-sm text-white/70">Tip: tap or click the sky to set off a firework.</p>
+        </div>
+        <div id="diwali-offer" class="mx-auto mt-8 max-w-4xl" aria-live="polite">
+          <div class="skeleton h-72 bg-white/10" aria-hidden="true"></div>
         </div>
       </div>
+    </section>
+  )}
+
+  <div class="container-x py-8 md:py-12">
+    {!DIWALI.enabled && <h1 class="text-3xl font-bold md:text-4xl">Offers</h1>}
+    <p id="notice" class="hidden rounded-xl border-2 border-saffron bg-amber-50 p-3 font-semibold" role="status"></p>
+
+    {otherOffers.length > 0 && (
+      <section class="mb-12" aria-labelledby="other-title">
+        <h2 id="other-title" class="section-title">Other offers</h2>
+        <ul class="mt-4 grid gap-4 md:grid-cols-2">
+          {otherOffers.map((o) => <li><PromoBanner title={o.title} text={o.text} cta={o.cta} href={o.href} tone="berry" badge="Offer" size="lg" /></li>)}
+        </ul>
+      </section>
     )}
 
+    <section aria-labelledby="price-title" class="mb-12">
+      <div class="rounded-2xl bg-tint p-6 md:p-8">
+        <h2 id="price-title" class="text-xl font-bold">Spend less on every order</h2>
+        <p class="mt-2 max-w-prose">See every product sorted by what you really pay per 100 g, so you can pick the best value pack.</p>
+        <a href="/shop?sort=unit-asc" class="btn btn-primary mt-4">See lowest price per 100 g</a>
+      </div>
+    </section>
+
     {BUNDLES.length > 0 && (
-      <section id="sets" class="mt-12 scroll-mt-32" aria-labelledby="sets-title">
-        <h2 id="sets-title" class="section-title">Ready-made sets</h2>
+      <section id="sets" class="scroll-mt-32" aria-labelledby="sets-title">
+        <h2 id="sets-title" class="section-title">Ready-made pack sets</h2>
         <p class="section-sub">Add a few products in one tap. Prices are the same as buying each item separately.</p>
         <ul id="bundle-list" class="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-3"></ul>
         <p id="bundle-empty" class="mt-4 hidden rounded-xl bg-cream-dark p-6">Sets will appear here once the product list has loaded.</p>
@@ -39,14 +61,22 @@ import { BUNDLES, OFFERS, STORE_NAME } from "../config";
     import { $ } from "../lib/dom";
     import { loadMenu } from "../lib/store";
     import { renderBundles } from "../lib/bundles";
+    import { renderDiwaliOffer } from "../lib/diwali";
+    import { initDiwaliFx } from "../lib/diwali-fx";
+    initDiwaliFx();
+    const dw = document.getElementById("diwali-offer");
     const list = document.getElementById("bundle-list");
-    if (list) {
-      loadMenu()
-        .then(() => {
+    loadMenu()
+      .then(() => {
+        if (dw && !renderDiwaliOffer(dw)) dw.replaceChildren();
+        if (list) {
           const n = renderBundles(list);
           $("#bundle-empty").classList.toggle("hidden", n > 0);
-        })
-        .catch(() => $("#bundle-empty").classList.remove("hidden"));
-    }
+        }
+      })
+      .catch(() => {
+        dw?.replaceChildren();
+        document.getElementById("bundle-empty")?.classList.remove("hidden");
+      });
   </script>
 </Shop>

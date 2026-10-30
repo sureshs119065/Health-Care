@@ -16,59 +16,37 @@ const current = (href: string) => (!href.includes("#") && !href.includes("?") &&
 const wa = `https://wa.me/${WHATSAPP_NUMBER.replace(/\D/g, "")}`;
 ---
 <Announcement />
-<header class="sticky top-0 z-40 border-b border-line bg-white/95 backdrop-blur" data-bestseller={BESTSELLER_TAG}>
-  <div class="container-x flex flex-wrap items-center gap-x-2 gap-y-2 py-2 md:gap-x-4">
-    <button id="menu-btn" type="button" class="btn border-2 border-line px-0 text-ink hover:bg-cream-dark lg:hidden" aria-expanded="false" aria-controls="mobile-nav" aria-label="Open menu">
-      <Icon name="menu" size={24} />
-    </button>
+<header class="sticky top-0 z-40 border-b border-line bg-surface shadow-[0_1px_0_var(--color-line)]" data-bestseller={BESTSELLER_TAG}>
+  <!-- Row 1: brand and navigation -->
+  <div class="relative border-b border-line">
+    <div class="container-x flex min-h-14 items-center gap-2 py-1 lg:gap-4">
+      <button id="menu-btn" type="button" class="btn border-2 border-line px-0 text-fg hover:bg-cream-dark lg:hidden" aria-expanded="false" aria-controls="mobile-nav" aria-label="Open menu">
+        <Icon name="menu" size={24} />
+      </button>
 
-    <a href="/" class="inline-flex min-h-11 items-center gap-2 font-display text-lg font-bold text-leaf sm:text-xl">
-      <svg width="34" height="34" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#1b5e3b" /><path d="M32 12c-12 4-18 14-16 28 12 2 22-4 24-14 1-6-2-11-8-14z" fill="#f4a100" /><path d="M20 42c4-8 9-13 17-17" stroke="#fbfbf8" stroke-width="3" fill="none" stroke-linecap="round" /></svg>
-      <span class="leading-none">{STORE_NAME}</span>
-    </a>
+      <a href="/" class="inline-flex min-h-11 shrink-0 items-center gap-2 font-display text-lg font-bold text-leaf sm:text-xl">
+        <svg width="34" height="34" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#1f7a4a" /><path d="M32 12c-12 4-18 14-16 28 12 2 22-4 24-14 1-6-2-11-8-14z" fill="#f4a100" /><path d="M20 42c4-8 9-13 17-17" stroke="#fbfbf8" stroke-width="3" fill="none" stroke-linecap="round" /></svg>
+        <span class="leading-none">{STORE_NAME}</span>
+      </a>
 
-    <div class="order-last w-full lg:order-none lg:flex-1">
-      <form id="search-form" role="search" action="/shop" method="get" class="relative mx-auto lg:max-w-3xl">
-        <label for="site-search" class="sr-only">Search products or categories</label>
-        <input
-          id="site-search" name="q" type="search"
-          class="h-12 w-full rounded-full border-2 border-leaf/70 bg-white pl-5 pr-14 text-base text-ink shadow-[var(--shadow-card)] transition-colors focus:border-leaf"
-          placeholder="Search products or categories"
-          autocomplete="off" role="combobox" aria-expanded="false" aria-controls="search-list" aria-autocomplete="list" enterkeyhint="search"
-        />
-        <button type="submit" class="absolute right-1 top-1 inline-flex h-10 w-10 items-center justify-center rounded-full bg-accent text-ink transition hover:bg-accent-dark active:scale-95" aria-label="Search">
-          <Icon name="search" size={20} />
+      <nav aria-label="Main" class="hidden min-w-0 flex-1 items-center gap-1 lg:flex">
+        <button id="mega-btn" type="button" class="btn btn-primary min-h-10 shrink-0 gap-2 py-1.5" aria-expanded="false" aria-controls="mega">
+          <Icon name="menu" size={18} /> Categories <Icon name="chevronDown" size={16} />
         </button>
-        <ul id="search-list" role="listbox" aria-label="Search suggestions" hidden class="absolute z-50 mt-2 max-h-[70vh] w-full overflow-y-auto rounded-2xl border border-line bg-white p-1 shadow-[var(--shadow-pop)]"></ul>
-      </form>
-    </div>
+        <ul class="flex flex-wrap items-center gap-0.5">
+          {links.map(([label, href]) => <li><a href={href} class="nav-link" aria-current={current(href)}>{label}</a></li>)}
+        </ul>
+      </nav>
 
-    <div class="ml-auto flex items-center gap-1 md:gap-2 lg:ml-0">
-      <a href="/faq" class="hidden min-h-11 items-center gap-1.5 rounded-[var(--radius-ctl)] px-3 font-semibold text-ink hover:bg-cream-dark xl:inline-flex">
-        <Icon name="help" size={20} /> Help
-      </a>
-      <a href={wa} target="_blank" rel="noopener" class="btn btn-whatsapp hidden px-3 sm:inline-flex" aria-label="Order or ask on WhatsApp (opens WhatsApp)">
-        <Icon name="whatsapp" size={22} />
-        <span class="hidden md:inline">WhatsApp</span>
-      </a>
-      <a id="header-cart" href="/cart" class="btn btn-primary relative px-3" aria-label="Cart">
+      <!-- Phones and tablets keep the cart in this row; laptops show it beside the search bar below -->
+      <a href="/cart" data-cart-link class="btn btn-primary relative ml-auto px-3 lg:hidden" aria-label="Cart">
         <Icon name="cart" size={22} />
         <span class="hidden sm:inline">Cart</span>
-        <span id="header-count" class="inline-flex min-w-6 items-center justify-center rounded-full bg-accent px-1.5 text-sm font-bold text-ink" aria-label="items in cart">0</span>
+        <span data-cart-count class="inline-flex min-w-6 items-center justify-center rounded-full bg-accent px-1.5 text-sm font-bold text-ink" aria-label="items in cart">0</span>
       </a>
     </div>
-  </div>
 
-  <nav aria-label="Main" class="relative hidden border-t border-line lg:block">
-    <div class="container-x flex items-center gap-1 py-1">
-      <button id="mega-btn" type="button" class="btn btn-primary min-h-10 gap-2 py-1.5" aria-expanded="false" aria-controls="mega">
-        <Icon name="menu" size={18} /> Categories <Icon name="chevronDown" size={16} />
-      </button>
-      <ul class="flex items-center gap-0.5">
-        {links.map(([label, href]) => <li><a href={href} class="nav-link" aria-current={current(href)}>{label}</a></li>)}
-      </ul>
-    </div>
-    <div id="mega" hidden class="absolute inset-x-0 top-full z-40 border-b border-line bg-white shadow-[var(--shadow-pop)]">
+    <div id="mega" hidden class="absolute inset-x-0 top-full z-40 border-b border-line bg-surface shadow-[var(--shadow-pop)]">
       <div class="container-x grid gap-8 py-6 lg:grid-cols-[1fr_2fr]">
         <div>
           <p class="mb-2 font-display text-lg font-bold">Shop by category</p>
@@ -81,9 +59,41 @@ const wa = `https://wa.me/${WHATSAPP_NUMBER.replace(/\D/g, "")}`;
         </div>
       </div>
     </div>
-  </nav>
+  </div>
 
-  <nav id="mobile-nav" aria-label="Main" hidden class="max-h-[calc(100dvh-8rem)] overflow-y-auto border-t border-line bg-white lg:hidden">
+  <!-- Row 2: search with Help, WhatsApp and Cart -->
+  <div class="container-x flex items-center gap-2 py-2 md:gap-3">
+    <form id="search-form" role="search" action="/shop" method="get" class="relative min-w-0 flex-1">
+      <label for="site-search" class="sr-only">Search products or categories</label>
+      <input
+        id="site-search" name="q" type="search"
+        class="h-12 w-full rounded-full border-2 border-leaf/70 bg-surface pl-5 pr-14 text-base text-fg shadow-[var(--shadow-card)] transition-colors focus:border-leaf"
+        placeholder="Search products or categories"
+        autocomplete="off" role="combobox" aria-expanded="false" aria-controls="search-list" aria-autocomplete="list" enterkeyhint="search"
+      />
+      <button type="submit" class="absolute right-1 top-1 inline-flex h-10 w-10 items-center justify-center rounded-full bg-accent text-ink transition hover:bg-accent-dark active:scale-95" aria-label="Search">
+        <Icon name="search" size={20} />
+      </button>
+      <ul id="search-list" role="listbox" aria-label="Search suggestions" hidden class="absolute z-50 mt-2 max-h-[70vh] w-full overflow-y-auto rounded-2xl border border-line bg-surface p-1 shadow-[var(--shadow-pop)]"></ul>
+    </form>
+
+    <div class="flex shrink-0 items-center gap-1 md:gap-2">
+      <a href="/faq" class="hidden min-h-11 items-center gap-1.5 rounded-[var(--radius-ctl)] px-3 font-semibold text-fg hover:bg-cream-dark md:inline-flex">
+        <Icon name="help" size={20} /> Help
+      </a>
+      <a href={wa} target="_blank" rel="noopener" class="btn btn-whatsapp hidden px-3 sm:inline-flex" aria-label="Order or ask on WhatsApp (opens WhatsApp)">
+        <Icon name="whatsapp" size={22} />
+        <span class="hidden md:inline">WhatsApp</span>
+      </a>
+      <a id="header-cart" href="/cart" data-cart-link class="btn btn-primary relative hidden px-3 lg:inline-flex" aria-label="Cart">
+        <Icon name="cart" size={22} />
+        <span>Cart</span>
+        <span data-cart-count class="inline-flex min-w-6 items-center justify-center rounded-full bg-accent px-1.5 text-sm font-bold text-ink" aria-label="items in cart">0</span>
+      </a>
+    </div>
+  </div>
+
+  <nav id="mobile-nav" aria-label="Main" hidden class="max-h-[calc(100dvh-8rem)] overflow-y-auto border-t border-line bg-surface lg:hidden">
     <ul class="container-x py-2">
       {links.map(([label, href]) => (
         <li class="border-b border-line">

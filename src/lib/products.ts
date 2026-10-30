@@ -6,10 +6,10 @@ import type { Product } from "./types";
 export const COLUMNS = [
   "id", "name", "category", "price", "weight", "image", "shortDescription",
   "ingredients", "calories", "protein", "carbs", "fibre", "fat", "fssai",
-  "inStock", "videoId", "tags", "howToUse",
+  "inStock", "videoId", "tags", "howToUse", "mrp",
 ] as const;
 
-const CACHE_KEY = "products:v2";
+const CACHE_KEY = "products:v3";
 
 export interface LoadResult {
   products: Product[];
@@ -45,6 +45,8 @@ export function rowsToProducts(rows: string[][]): Product[] {
       return void console.warn(`Row ${line} skipped: price is not a number (id ${id})`);
     }
     seen.add(id);
+    const mrpText = get("mrp").replace(/[^0-9.]/g, "");
+    const mrpNum = mrpText === "" ? 0 : Number(mrpText);
 
     const images = get("image")
       .split("|")
@@ -56,6 +58,7 @@ export function rowsToProducts(rows: string[][]): Product[] {
       name: cleanClaims(name),
       category: cleanClaims(get("category")) || "Other",
       price,
+      mrp: Number.isFinite(mrpNum) && mrpNum > price ? mrpNum : 0,
       weight: get("weight"),
       image: images[0] ?? "",
       images,
@@ -106,7 +109,7 @@ export function jsonToProducts(raw: Record<string, unknown>[]): Product[] {
 }
 
 async function loadFallback(): Promise<LoadResult> {
-  const res = await fetch("/data/products.json");
+  const res = await fetch("/data/products.json", { cache: "no-cache" });
   if (!res.ok) throw new Error(`Saved menu failed: HTTP ${res.status}`);
   const products = jsonToProducts((await res.json()) as Record<string, unknown>[]);
   if (products.length === 0) throw new Error("Saved menu is empty");

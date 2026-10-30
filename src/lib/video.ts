@@ -21,7 +21,7 @@ export function videoPlayer(p: Product): HTMLElement {
       frame.focus();
     },
   },
-    h("span", { class: "flex h-14 w-14 items-center justify-center rounded-full bg-white text-2xl text-leaf-dark", "aria-hidden": "true" }, "▶"),
+    h("span", { class: "flex h-14 w-14 items-center justify-center rounded-full bg-surface text-2xl text-leaf-dark", "aria-hidden": "true" }, "▶"),
     "Play video",
     h("span", { class: "px-4 text-center text-sm font-normal" }, "Loads from YouTube only when you tap play."));
   box.append(play);

@@ -38,13 +38,13 @@ const waHref = `https://wa.me/${WHATSAPP_NUMBER.replace(/\D/g, "")}`;
     </div>
   )}
   {tray && (
-    <div id="compare-tray" class="fixed bottom-[5rem] left-3 right-3 z-30 hidden items-center justify-between gap-3 rounded-2xl border-2 border-leaf bg-white p-2 pl-4 shadow-[var(--shadow-lift)] md:bottom-4 md:left-auto md:right-4 md:w-96">
+    <div id="compare-tray" class="fixed bottom-[5rem] left-3 right-3 z-30 hidden items-center justify-between gap-3 rounded-2xl border-2 border-leaf bg-surface p-2 pl-4 shadow-[var(--shadow-lift)] md:bottom-4 md:left-auto md:right-4 md:w-96">
       <a id="compare-link" href="/compare" class="font-semibold text-leaf underline underline-offset-2">Compare (<span id="compare-count">0</span>)</a>
       <button id="compare-clear" type="button" class="btn btn-outline">Clear</button>
     </div>
   )}
   {drawer && <CartDrawer />}
-  <div id="toast" data-show="false" aria-hidden="true" class="pointer-events-none fixed bottom-24 left-1/2 z-[70] hidden max-w-[90vw] -translate-x-1/2 rounded-full bg-ink px-5 py-3 text-center font-semibold text-white shadow-[var(--shadow-pop)] md:bottom-8"></div>
+  <div id="toast" data-show="false" aria-hidden="true" class="pointer-events-none fixed bottom-24 left-1/2 z-[70] hidden max-w-[90vw] -translate-x-1/2 rounded-full bg-fg px-5 py-3 text-center font-semibold text-ink shadow-[var(--shadow-pop)] md:bottom-8"></div>
   <script>
     import "../scripts/shell";
   </script>

@@ -3,7 +3,7 @@ import * as compare from "./compare";
 import { h } from "./dom";
 import { iconEl } from "./icons";
 import { productImg } from "./media";
-import { formatUnitPrice } from "./pricing";
+import { formatUnitPrice, offerInfo } from "./pricing";
 import { openQuickView } from "./quickview";
 import type { Product } from "./types";
 import { toast } from "./ui";
@@ -19,11 +19,12 @@ compare.subscribe(syncChecks);
 /** One product card, used on the home page, shop, product page and recipe page. */
 export function productCard(p: Product): HTMLElement {
   const href = `/product?id=${encodeURIComponent(p.id)}`;
+  const offer = offerInfo(p);
   const img = productImg(p, "aspect-square w-full bg-cream-dark object-cover transition duration-300 group-hover:scale-[1.03]", 400);
 
   const quick = h("button", {
     type: "button",
-    class: "absolute bottom-2 right-2 inline-flex h-11 min-w-11 items-center justify-center gap-1 rounded-full bg-white/95 px-3 text-sm font-semibold text-leaf shadow-md transition hover:bg-white focus-visible:opacity-100 md:opacity-0 md:group-hover:opacity-100",
+    class: "absolute bottom-2 right-2 inline-flex h-11 min-w-11 items-center justify-center gap-1 rounded-full bg-surface/95 px-3 text-sm font-semibold text-leaf shadow-md transition hover:bg-surface focus-visible:opacity-100 md:opacity-0 md:group-hover:opacity-100",
     "aria-label": `Quick view ${p.name}`,
     onclick: (e: Event) => openQuickView(p, e.currentTarget as HTMLElement),
   });
@@ -33,7 +34,9 @@ export function productCard(p: Product): HTMLElement {
     h("a", { href, tabindex: "-1", "aria-hidden": "true", class: "block" }, img),
     quick);
   if (!p.inStock) {
-    media.append(h("span", { class: "badge absolute left-2 top-2 bg-ink text-white" }, "Sold out"));
+    media.append(h("span", { class: "badge absolute left-2 top-2 bg-fg text-white" }, "Sold out"));
+  } else if (offer) {
+    media.append(h("span", { class: "badge absolute left-2 top-2 bg-berry text-white" }, p.tags.some((t) => t.toLowerCase() === "diwali") ? "Diwali offer" : `${offer.percent}% off`));
   }
 
   const unit = formatUnitPrice(p);
@@ -71,10 +74,11 @@ export function productCard(p: Product): HTMLElement {
         h("a", { href, class: "underline-offset-2 hover:underline" }, p.name)),
       h("p", { class: "flex items-center gap-1.5 text-sm text-muted" },
         p.weight || "",
-        h("span", { class: p.inStock ? "ml-auto inline-flex items-center gap-1 font-semibold text-leaf" : "ml-auto font-semibold text-ink" },
+        h("span", { class: p.inStock ? "ml-auto inline-flex items-center gap-1 font-semibold text-leaf" : "ml-auto font-semibold text-fg" },
           p.inStock ? h("span", { class: "h-2 w-2 rounded-full bg-leaf-soft", "aria-hidden": "true" }) : h("span"),
           p.inStock ? "In stock" : "Sold out")),
-      h("p", { class: "mt-1 text-xl font-bold text-ink" }, formatMoney(p.price)),
+      h("p", { class: "mt-1 flex flex-wrap items-baseline gap-x-2 text-xl font-bold text-fg" }, formatMoney(p.price),
+        ...(offer ? [h("s", { class: "text-sm font-medium text-muted" }, formatMoney(offer.mrp)), h("span", { class: "text-sm font-bold text-berry" }, `Save ${formatMoney(offer.save)}`)] : [])),
       h("p", { class: "min-h-5 text-sm text-muted" }, unit),
       h("div", { class: "mt-auto space-y-1 pt-2" },
         add,

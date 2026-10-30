@@ -3,6 +3,8 @@ export interface Product {
   name: string;
   category: string;
   price: number;
+  /** Original price before an offer. 0 when there is no offer. */
+  mrp: number;
   weight: string;
   image: string;
   /** Every photo for the gallery (the sheet image column may list several, separated by |). */

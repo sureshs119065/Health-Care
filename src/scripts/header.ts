@@ -15,18 +15,14 @@ if (announceBar) {
       announceBar.remove();
       try { sessionStorage.setItem("announce:closed", "1"); } catch { /* ignore */ }
     });
-    const textEl = document.getElementById("announce-text");
-    let items: { text: string; href?: string }[] = [];
-    try { items = JSON.parse(textEl?.dataset.items ?? "[]"); } catch { /* ignore */ }
-    if (textEl && items.length > 1 && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      let i = 0;
-      window.setInterval(() => {
-        if (document.hidden) return;
-        i = (i + 1) % items.length;
-        const it = items[i];
-        textEl.replaceChildren(it.href ? h("a", { href: it.href, class: "underline underline-offset-4 hover:text-accent" }, it.text) : document.createTextNode(it.text));
-      }, 6000);
-    }
+    const marquee = document.getElementById("announce-marquee");
+    const pause = document.getElementById("announce-pause");
+    pause?.addEventListener("click", () => {
+      const paused = marquee?.dataset.paused !== "true";
+      if (marquee) marquee.dataset.paused = String(paused);
+      pause.setAttribute("aria-pressed", String(paused));
+      pause.setAttribute("aria-label", paused ? "Resume scrolling offers" : "Pause scrolling offers");
+    });
   }
 }
 

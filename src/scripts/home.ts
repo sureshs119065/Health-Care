@@ -1,6 +1,8 @@
-import { BESTSELLER_TAG, BUNDLES } from "../config";
+import { BESTSELLER_TAG, BUNDLES, CATEGORY_IMAGES } from "../config";
 import { artUri } from "../lib/art";
 import { renderBundles } from "../lib/bundles";
+import { renderDiwaliOffer } from "../lib/diwali";
+import { initDiwaliFx } from "../lib/diwali-fx";
 import { productCard } from "../lib/card";
 import { arrowButton, initCarousel } from "../lib/carousel";
 import { $, h } from "../lib/dom";
@@ -16,7 +18,7 @@ function renderCategories(): void {
   const top = [...groups.entries()].sort((a, b) => b[1].length - a[1].length || a[0].localeCompare(b[0])).slice(0, 6);
   $("#cat-tiles").replaceChildren(
     ...top.map(([name, items]) => {
-      const photo = items.find((p) => p.image)?.image;
+      const photo = CATEGORY_IMAGES[name] || items.find((p) => p.image)?.image;
       return h("li", {},
         h("a", {
           href: `/shop?category=${encodeURIComponent(name)}`,
@@ -89,6 +91,8 @@ async function init(force = false): Promise<void> {
   try {
     await loadMenu(force);
     renderCategories();
+    const dw = document.getElementById("diwali-offer");
+    if (dw && !renderDiwaliOffer(dw)) document.getElementById("diwali")?.remove();
     const picks = renderBest();
     renderReels();
     renderUse(new Set(picks.map((p) => p.id)));
@@ -105,4 +109,5 @@ async function init(force = false): Promise<void> {
 }
 
 $("#retry").addEventListener("click", () => void init(true));
+initDiwaliFx();
 void init();
