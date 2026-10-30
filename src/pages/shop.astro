@@ -1,32 +1,47 @@
 ---
 import Shop from "../layouts/Shop.astro";
+import Icon from "../components/Icon.astro";
 import { STORE_NAME } from "../config";
 import { wording } from "../lib/copy";
 ---
-<Shop title={`Shop | ${STORE_NAME}`} description={wording.metaDescription}>
-  <div class="mx-auto max-w-[1400px] px-4 py-6">
-    <h1 class="text-3xl font-bold">Shop</h1>
-    <p class="mt-1">Search, filter and sort. Every pack shows its price, size and price per 100 g.</p>
+<Shop title={`Shop all products | ${STORE_NAME}`} description={wording.metaDescription}>
+  <div class="container-x py-6 md:py-8">
+    <nav aria-label="Breadcrumb" class="text-sm text-muted">
+      <ol id="crumbs" class="flex flex-wrap items-center gap-1">
+        <li><a href="/" class="underline-offset-2 hover:underline">Home</a></li>
+        <li aria-hidden="true">/</li>
+        <li><span aria-current="page">Shop</span></li>
+      </ol>
+    </nav>
+    <h1 id="shop-title" class="mt-2 text-3xl font-bold md:text-4xl">Shop all products</h1>
+    <p id="shop-desc" class="section-sub">Search, filter and sort. Every pack shows its price, size and price per 100 g.</p>
 
-    <p id="notice" class="mt-4 hidden rounded-lg border-2 border-saffron bg-amber-50 p-3 font-semibold" role="status"></p>
+    <p id="notice" class="mt-4 hidden rounded-xl border-2 border-saffron bg-amber-50 p-3 font-semibold" role="status"></p>
 
-    <div class="mt-5 lg:grid lg:grid-cols-[250px_1fr] lg:gap-8">
-      <aside id="categories" class="scroll-mt-32 lg:sticky lg:top-32 lg:self-start" aria-label="Filters">
-        <p id="cat-label" class="mb-1 font-semibold">Categories</p>
-        <div id="chips" class="-mx-4 flex gap-2 overflow-x-auto px-4 pb-2 lg:mx-0 lg:flex-col lg:overflow-visible lg:px-0" role="group" aria-labelledby="cat-label"></div>
-        <label class="mt-3 flex min-h-11 cursor-pointer items-center gap-2 font-semibold">
-          <input id="f-stock" type="checkbox" class="h-5 w-5 accent-[#1f5d3a]" />
-          In stock only
-        </label>
+    <div id="categories" class="mt-6 scroll-mt-32 lg:grid lg:grid-cols-[270px_1fr] lg:gap-8">
+      <div id="filters-overlay" data-open="false"></div>
+      <aside id="filters" data-open="false" aria-label="Filters" class="lg:sticky lg:top-36 lg:self-start">
+        <div class="flex items-center justify-between border-b border-line p-4 lg:hidden">
+          <h2 class="text-xl font-bold">Filters</h2>
+          <button id="filters-close" type="button" class="btn px-0" aria-label="Close filters"><Icon name="close" size={22} /></button>
+        </div>
+        <div id="filters-body" class="space-y-6 overflow-y-auto p-4 max-lg:min-h-0 max-lg:flex-1 lg:rounded-2xl lg:border lg:border-line lg:bg-surface"></div>
+        <div class="flex gap-2 border-t border-line p-4 lg:hidden">
+          <button id="filters-clear-m" type="button" class="btn btn-outline px-4">Clear all</button>
+          <button id="filters-apply" type="button" class="btn btn-primary flex-1 whitespace-nowrap">Show <span id="filters-apply-count">results</span></button>
+        </div>
       </aside>
 
       <div class="mt-3 min-h-[60vh] lg:mt-0">
-        <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+        <div class="mb-3 flex flex-wrap items-center justify-between gap-3">
           <p id="result-count" class="font-semibold" role="status"></p>
-          <div class="flex items-center gap-2">
-            <label for="sort" class="font-semibold">Sort by</label>
-            <select id="sort" class="input w-auto">
-              <option value="featured">Recommended</option>
+          <div class="flex min-w-0 items-center gap-2">
+            <button id="filters-open" type="button" class="btn btn-outline lg:hidden" aria-haspopup="dialog">
+              <Icon name="filter" size={18} /> Filters <span id="filters-badge" class="hidden rounded-full bg-accent px-2 text-sm text-ink"></span>
+            </button>
+            <label for="sort" class="sr-only md:not-sr-only md:font-semibold">Sort by</label>
+            <select id="sort" class="input w-auto min-w-0 max-w-[9.5rem] sm:max-w-none">
+              <option value="featured">Featured</option>
               <option value="price-asc">Price: low to high</option>
               <option value="price-desc">Price: high to low</option>
               <option value="unit-asc">Price per 100 g: low to high</option>
@@ -35,24 +50,22 @@ import { wording } from "../lib/copy";
           </div>
         </div>
 
-        <p id="active-search" class="mb-4 hidden items-center gap-3 rounded-lg bg-tint p-3">
-          <span id="active-search-text" class="font-semibold"></span>
-          <a href="/shop" class="font-semibold text-leaf underline underline-offset-2">Clear search</a>
-        </p>
+        <div id="active-filters" class="mb-4 hidden flex-wrap items-center gap-2" aria-label="Active filters"></div>
 
         <div id="skeleton" class="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4 xl:grid-cols-4" aria-hidden="true">
           {Array.from({ length: 8 }).map(() => <div class="skeleton aspect-[3/4]"></div>)}
         </div>
 
-        <div id="error" class="hidden rounded-xl border-2 border-red-800 bg-white p-6 text-center" role="alert">
-          <p class="text-lg font-semibold">We could not load the menu.</p>
+        <div id="error" class="hidden rounded-2xl border-2 border-red-800 bg-surface p-6 text-center" role="alert">
+          <p class="text-lg font-semibold">We could not load the products.</p>
           <p class="mt-1">Check your internet connection and try again.</p>
           <button id="retry" type="button" class="btn btn-primary mt-4">Retry</button>
         </div>
 
-        <div id="empty" class="hidden rounded-xl bg-cream-dark p-6 text-center">
-          <p class="font-semibold">No items match your search or filters.</p>
-          <button id="reset" type="button" class="btn btn-outline mt-3">Clear filters</button>
+        <div id="empty" class="hidden rounded-2xl bg-cream-dark p-8 text-center">
+          <p class="text-lg font-semibold">No products match your search or filters.</p>
+          <p class="mt-1 text-muted">Try removing a filter or searching for something else.</p>
+          <button id="reset" type="button" class="btn btn-primary mt-4">Clear all filters</button>
         </div>
 
         <ul id="grid" class="hidden grid-cols-2 gap-3 md:grid-cols-3 md:gap-4 xl:grid-cols-4"></ul>

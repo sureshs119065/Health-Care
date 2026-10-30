@@ -4,7 +4,8 @@ import { $, h } from "../lib/dom";
 import { formatUnitPrice, unitPrice } from "../lib/pricing";
 import { getProducts, loadMenu } from "../lib/store";
 import type { Product } from "../lib/types";
-import { PLACEHOLDER, setVisible, toast } from "../lib/ui";
+import { setVisible, toast } from "../lib/ui";
+import { productImg } from "../lib/media";
 import { formatMoney } from "../lib/whatsapp";
 
 // A shared link carries the ids in the address; otherwise use this device's compare list.
@@ -39,7 +40,7 @@ function render(): void {
         h("th", { scope: "col", class: "px-3 py-3" }, h("span", { class: "sr-only" }, "Feature")),
         ...items.map((p) =>
           h("th", { scope: "col", class: "px-3 py-3" },
-            h("img", { src: p.image || PLACEHOLDER, alt: p.name, width: "120", height: "120", class: "mb-2 h-24 w-24 rounded-lg bg-cream-dark object-cover" }),
+            productImg(p, "mb-2 h-24 w-24 rounded-xl bg-cream-dark object-cover", 120),
             h("a", { href: `/product?id=${encodeURIComponent(p.id)}`, class: "block font-bold underline-offset-2 hover:underline" }, p.name)))))
     ,
     h("tbody", {},

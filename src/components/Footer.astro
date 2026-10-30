@@ -1,17 +1,67 @@
 ---
-import { STORE_NAME, FSSAI_NUMBER } from "../config";
-const links = [["Shop", "/shop"], ["Recipe Videos", "/recipes"], ["About Us", "/about"], ["Contact", "/#contact"]];
+import { BUSINESS_ADDRESS, BUSINESS_NAME, FSSAI_NUMBER, ORDER_HOURS, RETURNS_POLICY, SERVICE_AREA, SOCIAL_LINKS, STORE_NAME, WHATSAPP_NUMBER, BESTSELLER_TAG } from "../config";
+const digits = WHATSAPP_NUMBER.replace(/\D/g, "");
+const cols: { title: string; links: [string, string][] }[] = [
+  { title: "Shop", links: [["All Products", "/shop"], ["Categories", "/shop#categories"], ["Bestsellers", "/shop?bestsellers=1"], ["Offers", "/offers"], ["Ready-made Sets", "/offers#sets"]] },
+  {
+    title: "Customer Support",
+    links: [
+      ["Contact Us", "/#contact"], ["Frequently Asked Questions", "/faq"], ["Ordering Guide", "/how-to-order"], ["Shipping and Delivery", "/delivery"],
+      ...(RETURNS_POLICY.length ? ([["Returns and Refunds", "/returns"]] as [string, string][]) : []),
+    ],
+  },
+  { title: "About", links: [["Our Story", "/about"], ["Quality and Ingredients", "/quality"], ["Privacy Policy", "/privacy"], ["Terms and Conditions", "/terms"]] },
+];
+const year = new Date().getFullYear();
+void BESTSELLER_TAG;
 ---
-<footer class="bg-leaf-dark px-4 py-8 pb-28 text-white md:pb-8">
-  <div class="mx-auto max-w-[1400px] space-y-3">
-    <p class="font-serif text-lg font-bold">{STORE_NAME}</p>
-    <nav aria-label="Footer">
-      <ul class="flex flex-wrap gap-x-2">
-        {links.map(([label, href]) => <li><a href={href} class="inline-flex min-h-11 items-center px-1 underline underline-offset-4">{label}</a></li>)}
-      </ul>
-    </nav>
-    <p>FSSAI Lic. No. {FSSAI_NUMBER}</p>
-    <p>Not a substitute for medical advice. Consult your doctor or dietitian.</p>
-    <p>Menu updated: <span id="updated">loading…</span></p>
+<footer class="mt-8 bg-black text-white" data-footer>
+  <div class="container-x grid gap-x-10 gap-y-2 py-10 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
+    <div class="space-y-3 md:col-span-2 lg:col-span-1">
+      <p class="flex items-center gap-2 font-display text-2xl font-bold">
+        <svg width="34" height="34" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#f4a100" /><path d="M32 12c-12 4-18 14-16 28 12 2 22-4 24-14 1-6-2-11-8-14z" fill="#0f3d27" /></svg>
+        {STORE_NAME}
+      </p>
+      <p class="max-w-sm text-white/85">Wholesome food made in small batches by a nurse and sold directly to you. Choose your items here and send the order on WhatsApp.</p>
+      <p class="text-white/85">{ORDER_HOURS}</p>
+      <p class="text-white/85">{SERVICE_AREA}</p>
+      <a href={`https://wa.me/${digits}`} target="_blank" rel="noopener" class="btn btn-accent">Chat on WhatsApp</a>
+      {SOCIAL_LINKS.length > 0 && (
+        <ul class="flex flex-wrap gap-2 pt-1" aria-label="Social links">
+          {SOCIAL_LINKS.map((s) => <li><a href={s.href} target="_blank" rel="noopener" class="btn btn-ghost-light px-3">{s.label}</a></li>)}
+        </ul>
+      )}
+    </div>
+
+    {cols.map((c) => (
+      <details class="group border-b border-white/20 md:border-0" data-col>
+        <summary class="flex min-h-12 cursor-pointer list-none items-center justify-between font-display text-lg font-bold md:pointer-events-none md:min-h-0 md:pb-2 [&::-webkit-details-marker]:hidden">
+          {c.title}
+          <svg class="transition-transform group-open:rotate-180 md:hidden" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
+        </summary>
+        <ul class="pb-3">
+          {c.links.map(([label, href]) => (
+            <li><a href={href} class="inline-flex min-h-11 items-center text-white/85 underline-offset-4 hover:text-accent hover:underline">{label}</a></li>
+          ))}
+        </ul>
+      </details>
+    ))}
   </div>
+
+  <div class="border-t border-white/20">
+    <div class="container-x space-y-1 py-6 pb-28 text-center text-sm text-white/90 md:pb-6">
+      <p>© {year} {BUSINESS_NAME || STORE_NAME}. All rights reserved.</p>
+      {BUSINESS_ADDRESS && <p>{BUSINESS_ADDRESS}</p>}
+      <p>FSSAI Licence No. {FSSAI_NUMBER}</p>
+      <p>Our foods are not a substitute for medical advice. Consult your doctor or dietitian.</p>
+      <p>Menu updated: <span id="updated">loading…</span></p>
+    </div>
+  </div>
+  <script>
+    // Footer columns are collapsible on phones and always open from tablet width up.
+    const mq = window.matchMedia("(min-width: 768px)");
+    const sync = () => document.querySelectorAll<HTMLDetailsElement>("[data-col]").forEach((d) => (d.open = mq.matches));
+    sync();
+    mq.addEventListener("change", sync);
+  </script>
 </footer>

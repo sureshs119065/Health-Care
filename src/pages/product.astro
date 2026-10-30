@@ -3,10 +3,17 @@ import Shop from "../layouts/Shop.astro";
 import { STORE_NAME } from "../config";
 ---
 <Shop title={`Product | ${STORE_NAME}`} description="Product details, ingredients and nutrition.">
-  <div class="mx-auto max-w-[1100px] px-4 py-6">
-    <a href="/#menu" class="inline-flex min-h-11 items-center font-semibold text-leaf underline underline-offset-2">Back to menu</a>
+  <div class="container-x py-6 md:py-8">
+    <nav aria-label="Breadcrumb" class="mb-4 text-sm text-muted">
+      <ol class="flex flex-wrap items-center gap-1">
+        <li><a href="/" class="underline-offset-2 hover:underline">Home</a></li><li aria-hidden="true">/</li>
+        <li><a href="/shop" class="underline-offset-2 hover:underline">Shop</a></li><li aria-hidden="true">/</li>
+        <li id="crumb-cat">Product</li><li aria-hidden="true">/</li>
+        <li><span id="crumb-name" aria-current="page">…</span></li>
+      </ol>
+    </nav>
 
-    <p id="notice" class="mb-4 hidden rounded-lg border-2 border-saffron bg-amber-50 p-3 font-semibold" role="status"></p>
+    <p id="notice" class="mb-4 hidden rounded-xl border-2 border-saffron bg-amber-50 p-3 font-semibold" role="status"></p>
 
     <div id="skeleton" class="grid gap-6 md:grid-cols-2" aria-hidden="true">
       <div class="skeleton aspect-square"></div>
@@ -17,16 +24,16 @@ import { STORE_NAME } from "../config";
       </div>
     </div>
 
-    <div id="error" class="hidden rounded-xl border-2 border-red-800 bg-white p-6 text-center" role="alert">
+    <div id="error" class="hidden rounded-xl border-2 border-red-800 bg-surface p-6 text-center" role="alert">
       <p class="text-lg font-semibold">We could not load this item.</p>
       <p class="mt-1">Check your internet connection and try again.</p>
       <button id="retry" type="button" class="btn btn-primary mt-4">Retry</button>
     </div>
 
-    <div id="notfound" class="hidden rounded-xl bg-cream-dark p-8 text-center">
+    <div id="notfound" class="hidden rounded-2xl bg-cream-dark p-8 text-center">
       <h1 class="text-2xl font-bold">We could not find that item</h1>
       <p class="mt-2">It may have been removed from the menu, or the link is not complete.</p>
-      <a href="/#menu" class="btn btn-primary mt-4">See the full menu</a>
+      <a href="/shop" class="btn btn-primary mt-4">Browse all products</a>
     </div>
 
     <article id="product" class="hidden"></article>

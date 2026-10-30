@@ -1,0 +1,29 @@
+---
+import Shop from "../layouts/Shop.astro";
+import { STORE_NAME, WHATSAPP_NUMBER } from "../config";
+import { FAQS } from "../lib/policies";
+const wa = `https://wa.me/${WHATSAPP_NUMBER.replace(/\D/g, "")}`;
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: FAQS.map(([q, a]) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: a } })),
+};
+---
+<Shop title={`FAQ | ${STORE_NAME}`} description="Answers about ordering, payment, delivery and changes." jsonLd={jsonLd}>
+  <div class="container-x max-w-3xl py-8 md:py-12">
+    <nav aria-label="Breadcrumb" class="text-sm text-muted"><a href="/" class="underline-offset-2 hover:underline">Home</a> <span aria-hidden="true">/</span> <span aria-current="page">FAQ</span></nav>
+    <h1 class="mt-3 text-3xl font-bold md:text-4xl">Questions people ask</h1>
+    <div class="mt-6 divide-y divide-line rounded-2xl border border-line bg-surface">
+      {FAQS.map(([q, a]) => (
+        <details class="group px-4">
+          <summary class="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 py-3 font-semibold [&::-webkit-details-marker]:hidden">
+            <span>{q}</span>
+            <span class="text-leaf transition-transform group-open:rotate-180" aria-hidden="true">▾</span>
+          </summary>
+          <p class="max-w-prose pb-4">{a}</p>
+        </details>
+      ))}
+    </div>
+    <p class="mt-6">Still unsure? <a href={wa} target="_blank" rel="noopener" class="font-semibold text-leaf underline underline-offset-4">Ask us on WhatsApp</a>.</p>
+  </div>
+</Shop>

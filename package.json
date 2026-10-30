@@ -4,7 +4,10 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "sync:products": "node scripts/sync-products.mjs",
+    "predev": "node scripts/sync-products.mjs",
     "dev": "astro dev",
+    "prebuild": "node scripts/sync-products.mjs",
     "build": "astro build",
     "preview": "astro preview"
   },

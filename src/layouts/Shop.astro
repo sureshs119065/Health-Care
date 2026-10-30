@@ -21,7 +21,7 @@ const waHref = `https://wa.me/${WHATSAPP_NUMBER.replace(/\D/g, "")}`;
   <Header />
   <main id="main">
     <noscript>
-      <p class="m-4 rounded-lg border-2 border-saffron bg-amber-50 p-4 font-semibold">
+      <p class="m-4 rounded-xl border-2 border-saffron bg-amber-50 p-4 font-semibold">
         This website needs JavaScript to show the menu. You can still order by messaging us on
         <a href={waHref} class="underline">WhatsApp</a>.
       </p>
@@ -30,21 +30,21 @@ const waHref = `https://wa.me/${WHATSAPP_NUMBER.replace(/\D/g, "")}`;
   </main>
   <Footer />
   {bar && (
-    <div id="cart-bar" class="fixed inset-x-0 bottom-0 z-30 hidden border-t border-line bg-cream p-3 md:hidden">
-      <button id="bar-btn" type="button" class="btn btn-primary w-full justify-between" aria-haspopup="dialog">
+    <div id="cart-bar" class="fixed inset-x-0 bottom-0 z-30 hidden border-t border-line bg-white/95 p-3 shadow-[0_-6px_20px_rgb(21_38_28/0.08)] backdrop-blur md:hidden">
+      <button id="bar-btn" type="button" class="btn btn-primary btn-lg w-full justify-between" aria-haspopup="dialog">
         <span>View Cart (<span id="bar-count">0</span>)</span>
         <span id="bar-total"></span>
       </button>
     </div>
   )}
   {tray && (
-    <div id="compare-tray" class="fixed bottom-[4.75rem] left-3 right-3 z-30 hidden items-center justify-between gap-3 rounded-xl border-2 border-leaf bg-white p-2 pl-4 shadow-lg md:bottom-4 md:left-auto md:right-4 md:w-96">
+    <div id="compare-tray" class="fixed bottom-[5rem] left-3 right-3 z-30 hidden items-center justify-between gap-3 rounded-2xl border-2 border-leaf bg-surface p-2 pl-4 shadow-[var(--shadow-lift)] md:bottom-4 md:left-auto md:right-4 md:w-96">
       <a id="compare-link" href="/compare" class="font-semibold text-leaf underline underline-offset-2">Compare (<span id="compare-count">0</span>)</a>
       <button id="compare-clear" type="button" class="btn btn-outline">Clear</button>
     </div>
   )}
   {drawer && <CartDrawer />}
-  <div id="toast" aria-hidden="true" class="pointer-events-none fixed left-1/2 top-24 z-[55] hidden max-w-[90vw] -translate-x-1/2 rounded-lg bg-ink px-4 py-3 text-center font-semibold text-white shadow-lg"></div>
+  <div id="toast" data-show="false" aria-hidden="true" class="pointer-events-none fixed bottom-24 left-1/2 z-[70] hidden max-w-[90vw] -translate-x-1/2 rounded-full bg-fg px-5 py-3 text-center font-semibold text-ink shadow-[var(--shadow-pop)] md:bottom-8"></div>
   <script>
     import "../scripts/shell";
   </script>

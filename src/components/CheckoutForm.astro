@@ -25,8 +25,8 @@ const { prefix, showBack = false } = Astro.props;
     <label for={`${prefix}-notes`} class="mb-1 block font-semibold">Notes (optional)</label>
     <textarea id={`${prefix}-notes`} rows="2" class="input"></textarea>
   </div>
-  <p class="flex justify-between text-lg font-bold"><span>Estimated total</span><span id={`${prefix}-total`}>₹0</span></p>
+  <p class="flex justify-between text-lg font-bold"><span>Subtotal</span><span id={`${prefix}-total`}>₹0</span></p>
   <p class="text-sm">The total is confirmed by the owner on WhatsApp. No payment is taken here.</p>
-  <button id={`${prefix}-submit`} type="submit" class="btn btn-primary w-full">Send Order on WhatsApp</button>
+  <button id={`${prefix}-submit`} type="submit" class="btn btn-whatsapp btn-lg w-full">Send Order on WhatsApp</button>
   {showBack && <button id={`${prefix}-back`} type="button" class="btn btn-outline w-full">Back to cart</button>}
 </form>

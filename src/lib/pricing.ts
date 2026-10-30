@@ -34,3 +34,10 @@ export function formatUnitPrice(p: Product): string {
   const u = unitPrice(p);
   return u ? `${formatMoney(Math.round(u.per100 * 100) / 100)} / 100 ${u.unit}` : "";
 }
+
+/** Offer details when a product has an original price (mrp) above its selling price. */
+export function offerInfo(p: Product): { mrp: number; save: number; percent: number } | null {
+  if (!p.mrp || p.mrp <= p.price) return null;
+  const save = p.mrp - p.price;
+  return { mrp: p.mrp, save, percent: Math.round((save / p.mrp) * 100) };
+}
